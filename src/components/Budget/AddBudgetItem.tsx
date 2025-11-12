@@ -2,102 +2,161 @@
 "use client";
 
 import { useState } from "react";
+import { FaPlus, FaTools, FaLaptop, FaShieldAlt, FaWifi } from "react-icons/fa";
 
-// Definindo o tipo de dados que o formulário vai enviar
-// Usamos Omit para remover o 'id', que será gerado no componente pai (o Modal)
 type NewItemData = {
   name: string;
   quantity: number;
   notes: string;
+  category: string;
 };
 
-// Props que o componente recebe: uma função para ser chamada no submit
 interface AddBudgetItemProps {
   onAddItem: (data: NewItemData) => void;
 }
+
+const serviceCategories = [
+  { value: "formatacao", label: "Formatação", icon: FaLaptop },
+  { value: "manutencao", label: "Manutenção", icon: FaTools },
+  { value: "seguranca", label: "Segurança", icon: FaShieldAlt },
+  { value: "rede", label: "Rede/Wi-Fi", icon: FaWifi },
+  { value: "outro", label: "Outro", icon: FaPlus },
+];
 
 export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState("");
+  const [category, setCategory] = useState("outro");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert("Por favor, preencha o nome do item.");
+      alert("Por favor, preencha o nome do serviço.");
       return;
     }
 
-    // Chama a função passada pelo pai com os dados do formulário
-    onAddItem({ name, quantity, notes });
-
-    // Limpa o formulário
+    onAddItem({ name, quantity, notes, category });
     setName("");
     setQuantity(1);
     setNotes("");
+    setCategory("outro");
   };
 
+  const popularServices = [
+    "Formatação Windows + Backup",
+    "Remoção de Vírus",
+    "Limpeza Interna Completa",
+    "Upgrade de Memória RAM",
+    "Instalação de SSD",
+    "Configuração de Rede Wi-Fi"
+  ];
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-6">
+      {/* Serviços Populares */}
       <div>
-        <label
-          htmlFor="item-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Produto/Serviço
-        </label>
-        <input
-          type="text"
-          id="item-name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Ex: Manutenção de notebook"
-          className="text-gray-600 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-          required
-        />
+        <h4 className="text-sm font-semibold text-gray-700 mb-3">Serviços Populares</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+          {popularServices.map((service, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setName(service)}
+              className="text-left p-3 text-sm bg-gray-50 hover:bg-orange-50 border border-gray-200 rounded-lg transition-all duration-200 hover:border-orange-300 hover:scale-105"
+            >
+              {service}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div>
-        <label
-          htmlFor="item-quantity"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Quantidade
-        </label>
-        <input
-          type="number"
-          id="item-quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10)))}
-          min="1"
-          className="text-gray-600 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-          required
-        />
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Categoria */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Categoria do Serviço
+          </label>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            {serviceCategories.map((cat) => {
+              const IconComponent = cat.icon;
+              return (
+                <button
+                  key={cat.value}
+                  type="button"
+                  onClick={() => setCategory(cat.value)}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-1 ${
+                    category === cat.value
+                      ? "border-orange-500 bg-orange-50 text-orange-600"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-orange-300"
+                  }`}
+                >
+                  <IconComponent className="text-lg" />
+                  <span className="text-xs font-medium">{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-      <div>
-        <label
-          htmlFor="item-notes"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Observações (Opcional)
-        </label>
-        <textarea
-          id="item-notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={3}
-          placeholder="Ex: limpez, troca de componentes, etc."
-          className="text-gray-600 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-        />
-      </div>
+        {/* Nome do Serviço */}
+        <div>
+          <label htmlFor="item-name" className="block text-sm font-semibold text-gray-700 mb-2">
+            Descrição do Serviço *
+          </label>
+          <input
+            type="text"
+            id="item-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex: Formatação completa com backup de arquivos"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700 placeholder-gray-400 transition-all duration-200"
+            required
+          />
+        </div>
 
-      <button
-        type="submit"
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-      >
-        Adicionar Item
-      </button>
-    </form>
+        {/* Quantidade e Observações em Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="item-quantity" className="block text-sm font-semibold text-gray-700 mb-2">
+              Quantidade
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                id="item-quantity"
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10)))}
+                min="1"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700 transition-all duration-200"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="item-notes" className="block text-sm font-semibold text-gray-700 mb-2">
+              Observações
+            </label>
+            <textarea
+              id="item-notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={1}
+              placeholder="Detalhes adicionais..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700 placeholder-gray-400 resize-none transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-linear-to-r from-orange-500 to-orange-600 text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+        >
+          <FaPlus className="text-lg" />
+          ADICIONAR SERVIÇO
+        </button>
+      </form>
+    </div>
   );
 }
