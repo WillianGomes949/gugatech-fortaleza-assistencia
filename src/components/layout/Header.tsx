@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaTools, FaUsers, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
-import AddBudgetModal from "../Budget/AddBudgetModal";
 import { FaHouse } from "react-icons/fa6";
 import Image from "next/image";
 
@@ -18,7 +17,6 @@ const navLinks = [
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -72,13 +70,13 @@ export default function Header() {
                   </span>
                 </Link>
               ))}
-              <button
-                onClick={() => setIsBudgetModalOpen(true)}
+              <Link
+                href="/budget"
                 className="ml-4 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
               >
                 <FaTools className="text-sm" />
                 Fazer Orçamento
-              </button>
+              </Link>
             </div>
 
             {/* Botão Menu Móvel */}
@@ -113,16 +111,14 @@ export default function Header() {
                   {link.name}
                 </Link>
               ))}
-              <button
-                onClick={() => {
-                  setIsBudgetModalOpen(true);
-                  setIsMobileMenuOpen(false);
-                }}
+              <Link
+                href="/budget"
+               
                 className="w-full flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium text-white bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-200 mt-4"
               >
                 <FaTools />
                 Fazer Orçamento
-              </button>
+              </Link>
             </div>
             
             {/* Contato Rápido no Mobile */}
@@ -142,14 +138,6 @@ export default function Header() {
           </div>
         )}
       </header>
-
-      {/* Espaço para o header fixo */}
-      <div className="h-20"></div>
-
-      <AddBudgetModal
-        isOpen={isBudgetModalOpen}
-        onClose={() => setIsBudgetModalOpen(false)}
-      />
     </>
   );
 }
