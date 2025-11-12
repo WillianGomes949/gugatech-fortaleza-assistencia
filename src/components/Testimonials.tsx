@@ -13,7 +13,7 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "Serviço excelente! Meu notebook estava muito lento e a equipe da GugaTech Fortaleza deixou ele novo de novo. Atendimento rápido e preço justo. Recomendo muito!",
+    quote: "Serviço excelente! Meu notebook estava muito lento e a equipe da GugaTech deixou ele novo de novo. Atendimento rápido e preço justo. Recomendo muito!",
     author: "Maria Silva",
     rating: 5,
     service: "Formatação + Limpeza",

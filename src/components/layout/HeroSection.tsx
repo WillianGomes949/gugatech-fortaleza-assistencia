@@ -12,9 +12,9 @@ export default function HeroSection() {
           <div className="text-center lg:text-left space-y-8">
            
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-orange-500 backdrop-blur-sm border border-orange-500 px-4 py-2 rounded-full text-gray-50 text-sm font-semibold">
-              Assistência Técnica Especializada
-            </div>
+            <span className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-orange-200">
+            Assistência Técnica Especializada
+          </span>
 
             {/* Título Principal */}
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
@@ -66,7 +66,7 @@ export default function HeroSection() {
               
               <Link
                 href="#services"
-                className="group px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-lg font-bold rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-3 w-full sm:w-auto"
+                className="group px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 w-full sm:w-auto"
               >
                 <FaTools />
                 <span>VER SERVIÇOS</span>
@@ -74,7 +74,7 @@ export default function HeroSection() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 pt-8 text-sm text-gray-600">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <span>Seja mais um cliente satisfeito</span>
               </div>
@@ -119,7 +119,7 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
-          <div className="absolute md:top-120 lg:top-150 left-130 w-full h-full hidden md:block">
+          <div className="absolute md:top-120 lg:top-150 lg:left-160 left-130 w-full h-full hidden md:block">
               <Image
                 src="/images/guga_logo.png"
                 alt="Técnico da GugaTech Fortaleza"
