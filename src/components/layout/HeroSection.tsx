@@ -5,19 +5,14 @@ import { FaWhatsapp, FaTools, FaShieldAlt, FaClock, FaStar } from "react-icons/f
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-linear-to-br from-gray-900 via-blue-900 to-gray-900 text-white overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,140,0,0.1),transparent_50%)]"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl -translate-y-48 translate-x-48"></div>
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl -translate-x-48 translate-y-48"></div>
-      
+    <section className="relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Coluna de Texto */}
           <div className="text-center lg:text-left space-y-8">
            
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 px-4 py-2 rounded-full text-orange-300 text-sm font-semibold">
+            <div className="inline-flex items-center gap-2 bg-orange-500 backdrop-blur-sm border border-orange-500 px-4 py-2 rounded-full text-gray-50 text-sm font-semibold">
               Assistência Técnica Especializada
             </div>
 
@@ -27,31 +22,31 @@ export default function HeroSection() {
                 GugaTech
               </span>
               <br />
-              <span className="text-white">Fortaleza</span>
+              <span className="text-gray-900">Fortaleza</span>
             </h1>
 
             {/* Subtítulo */}
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-lg">
+            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-lg">
               Soluções completas em 
               <span className="text-orange-400 font-semibold"> TI e tecnologia </span>
               para seu notebook, PC e MacBook
             </p>
 
             {/* Lista de Benefícios */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md">
-              <div className="flex items-center gap-3 text-gray-300">
+            <div className="grid grid-cols-2 gap-2 md:gap-4 max-w-md">
+              <div className="flex items-center gap-3 text-gray-600">
                 <FaTools className="text-orange-400 text-lg" />
                 <span>Reparo Profissional</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
+              <div className="flex items-center gap-3 text-gray-600">
                 <FaShieldAlt className="text-orange-400 text-lg" />
                 <span>Garantia no Serviço</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
+              <div className="flex items-center gap-3 text-gray-600">
                 <FaClock className="text-orange-400 text-lg" />
                 <span>Atendimento Rápido</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
+              <div className="flex items-center gap-3 text-gray-600">
                 <FaWhatsapp className="text-orange-400 text-lg" />
                 <span>Suporte Total</span>
               </div>
@@ -79,7 +74,7 @@ export default function HeroSection() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 pt-8 text-sm text-gray-400">
+            <div className="flex flex-col sm:flex-row items-center gap-6 pt-8 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <span>Seja mais um cliente satisfeito</span>
               </div>
@@ -116,18 +111,24 @@ export default function HeroSection() {
               </div>
 
               {/* Badge de Experiência */}
-              <div className="absolute -top-4 -left-4 bg-white text-gray-900 px-4 py-2 rounded-xl shadow-lg font-bold">
-                <div className="flex items-center gap-2">
+              <div className="absolute -top-4 -left-4 bg-white text-gray-900 px-4 py-2 rounded-xl shadow-lg font-bold border border-orange-500/30">
+                <div className="flex items-center gap-2 ">
                   <FaStar className="text-orange-500" />
                   <span>10+ Anos de Experiência</span>
                 </div>
               </div>
             </div>
-
-            {/* Elementos Decorativos */}
-            <div className="absolute -z-10 top-10 -right-10 w-64 h-64 bg-orange-500/20 rounded-full blur-2xl"></div>
-            <div className="absolute -z-10 bottom-10 -left-10 w-48 h-48 bg-blue-500/20 rounded-full blur-2xl"></div>
           </div>
+          <div className="absolute md:top-120 lg:top-150 left-130 w-full h-full hidden md:block">
+              <Image
+                src="/images/guga_logo.png"
+                alt="Técnico da GugaTech Fortaleza"
+                width={200}
+                height={200}
+                className=" object-cover object-center rounded-3xl bg-gray-50 shadow-2xl"
+                priority
+              />
+            </div>
         </div>
       </div>
 
