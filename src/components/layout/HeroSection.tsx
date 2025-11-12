@@ -17,7 +17,6 @@ export default function HeroSection() {
           <div className="text-center lg:text-left space-y-8">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 px-4 py-2 rounded-full text-orange-300 text-sm font-semibold">
-              <FaStar className="text-yellow-400" />
               Assistência Técnica Especializada
             </div>
 
