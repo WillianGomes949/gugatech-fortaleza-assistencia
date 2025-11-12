@@ -85,7 +85,7 @@ export default function AboutUs() {
               <div className="bg-linear-to-r from-gray-50 to-gray-100 p-6 text-center border-t border-gray-200">
                 <div className="flex items-center justify-center gap-4">
                   <Image
-                    src="/images/guga-logo.png"
+                    src="/images/guga_logo_dark.png"
                     alt="GugaTech Fortaleza"
                     width={140}
                     height={60}
