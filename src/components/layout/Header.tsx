@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FaTools, FaUsers, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FaHouse } from "react-icons/fa6";
@@ -17,6 +17,7 @@ const navLinks = [
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+   const menuRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -26,6 +27,20 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -98,7 +113,7 @@ export default function Header() {
 
         {/* Menu Móvel (Dropdown) */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white/95 backdrop-blur-md shadow-xl absolute top-full left-0 right-0 z-40 border-t border-gray-100">
+          <div ref={menuRef} className="md:hidden bg-white/95 backdrop-blur-md shadow-xl absolute top-full left-0 right-0 z-40 border-t border-gray-100">
             <div className="px-4 pt-4 pb-6 space-y-2">
               {navLinks.map((link) => (
                 <Link
@@ -112,6 +127,7 @@ export default function Header() {
                 </Link>
               ))}
               <Link
+                onClick={() => setIsMobileMenuOpen(false)}
                 href="/budget"
                
                 className="w-full flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium text-white bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-200 mt-4"
