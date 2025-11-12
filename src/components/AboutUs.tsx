@@ -52,19 +52,19 @@ export default function AboutUs() {
                   {/* Lista de benefícios */}
                   <div className="mt-6 space-y-2 text-left bg-white/10 backdrop-blur-sm rounded-xl p-4">
                     <div className="flex items-center gap-2 text-sm">
-                      <FaStar className="text-yellow-300 shrink-0" />
+                      <FaStar />
                       <span>Instalação do Windows 10/11</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <FaShieldAlt className="text-green-300 shrink-0" />
+                      <FaShieldAlt />
                       <span>Antivirus incluso</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <FaClock className="text-blue-300 shrink-0" />
+                      <FaClock />
                       <span>Backup dos seus arquivos</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <FaHome className="text-purple-300 shrink-0" />
+                      <FaHome />
                       <span>Busca e entrega grátis</span>
                     </div>
                   </div>
