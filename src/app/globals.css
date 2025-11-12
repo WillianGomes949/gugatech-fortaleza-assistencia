@@ -2,8 +2,8 @@
 
 @theme {
   /* Cores personalizadas */
-  --color-pers-primary: oklch(70.5% 0.213 47.604);
-  --color-pers-primary-hover: oklch(64.6% 0.222 41.116);
+  --color-pers-primary: #ff6900;
+  --color-pers-primary-hover: #f54900;
   --color-pers-secondary: #e6a52e;
   --color-pers-accent: #312c85;
   --color-pers-bg-light: #f9fafb;
@@ -34,9 +34,9 @@
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-pers-secundary);
+  background-color: var(--color-pers-primary-hover);
 }
 
 *::-webkit-scrollbar-thumb:active {
-  background-color: var(--color-pers-primary-hover);
+  background-color: var(--color-pers-secondary);
 }
