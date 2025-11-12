@@ -73,7 +73,7 @@ export default function ContactForm() {
               <div className="mt-8 pt-8 border-t border-gray-700">
                 <div className="flex justify-center">
                   <Image
-                    src="/images/guga-logo.png"
+                    src="/images/guga_logo_dark.png"
                     alt="GugaTech Fortaleza"
                     width={120}
                     height={50}
