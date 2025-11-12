@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Geek Fortaleza | Assistência Técnica de Celulares e Notebooks",
+  title: "Guga Tech | Assistência Técnica de Celulares e Notebooks",
   description:
     "Especialistas em reparo de iPhone, Samsung, notebooks e mais. Orçamento rápido e garantia de serviço em Fortaleza.",
   // Adicionar palavras-chave relevantes

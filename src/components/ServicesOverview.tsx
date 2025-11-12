@@ -1,9 +1,8 @@
 // components/ServicesOverview.tsx
-
 import Image from "next/image";
+import Link from "next/link";
 import { IconType } from "react-icons";
 import { HiWrenchScrewdriver } from "react-icons/hi2";
-// Adicione HiChip, HiCube e HiWifi
 import {
   HiShieldCheck,
   HiDesktopComputer,
@@ -11,6 +10,7 @@ import {
   HiCube,
   HiWifi,
 } from "react-icons/hi";
+import { FaArrowRight, FaClock, FaShieldAlt, FaHome } from "react-icons/fa";
 
 interface Service {
   icon: IconType;
@@ -18,99 +18,170 @@ interface Service {
   description: string;
   href: string;
   img: string;
+  features: string[];
+  duration: string;
 }
 
 const services: Service[] = [
   {
     icon: HiShieldCheck,
     title: "REMOÇÃO DE VÍRUS E MALWARE",
-    description:
-      "Seu computador está lento ou com anúncios? Realizamos uma varredura completa para remover vírus, spyware e malware, restaurando a velocidade e a segurança do seu sistema.",
-    href: "",
+    description: "Seu computador está lento ou com anúncios? Realizamos uma varredura completa para remover vírus, spyware e malware, restaurando a velocidade e a segurança do seu sistema.",
+    href: "/servicos/remocao-virus",
     img: "/images/servicos/virus.webp",
+    features: ["Varredura Completa", "Remoção Total", "Prevenção Futura", "Otimização"],
+    duration: "1-2 horas"
   },
   {
     icon: HiDesktopComputer,
     title: "FORMATAÇÃO E INSTALAÇÃO",
-    description:
-      "Deixe seu equipamento como novo. Formatamos e reinstalamos o sistema (Windows, macOS ou Linux) com backup seguro dos seus arquivos e instalação de drivers e programas essenciais.",
-    href: "",
+    description: "Deixe seu equipamento como novo. Formatamos e reinstalamos o sistema (Windows, macOS ou Linux) com backup seguro dos seus arquivos e instalação de drivers e programas essenciais.",
+    href: "/servicos/formatacao",
     img: "/images/servicos/formatacao.webp",
+    features: ["Backup Seguro", "Instalação Completa", "Drivers Atualizados", "Programas Essenciais"],
+    duration: "2-3 horas"
   },
   {
     icon: HiWrenchScrewdriver,
     title: "MANUTENÇÃO PREVENTIVA",
-    description:
-      "Aumente a vida útil do seu PC ou notebook. Fazemos a limpeza interna completa, troca de pasta térmica e otimização de componentes para evitar superaquecimento e falhas.",
+    description: "Aumente a vida útil do seu PC ou notebook. Fazemos a limpeza interna completa, troca de pasta térmica e otimização de componentes para evitar superaquecimento e falhas.",
     href: "",
     img: "/images/servicos/process.webp",
+    features: ["Limpeza Interna", "Troca Pasta Térmica", "Otimização", "Teste de Componentes"],
+    duration: "1-2 horas"
   },
   {
     icon: HiChip,
     title: "UPGRADE DE HARDWARE",
-    description:
-      "Seu computador precisa de mais fôlego? Instalamos mais memória RAM, SSDs de alta velocidade e placas de vídeo para garantir o máximo desempenho em jogos ou trabalho.",
+    description: "Seu computador precisa de mais fôlego? Instalamos mais memória RAM, SSDs de alta velocidade e placas de vídeo para garantir o máximo desempenho em jogos ou trabalho.",
     href: "",
     img: "/images/servicos/pc-gamer-1.webp",
+    features: ["Mais Performance", "SSD High-Speed", "Mais Memória RAM", "Placa de Vídeo"],
+    duration: "1-3 horas"
   },
   {
     icon: HiCube,
     title: "MONTAGEM DE PC PERSONALIZADO",
-    description:
-      "Montamos o PC dos seus sonhos, seja para jogos (Gamer) ou trabalho (Workstation). Consultoria completa na escolha das peças, montagem profissional e gerenciamento de cabos.",
+    description: "Montamos o PC dos seus sonhos, seja para jogos (Gamer) ou trabalho (Workstation). Consultoria completa na escolha das peças, montagem profissional e gerenciamento de cabos.",
     href: "",
     img: "/images/servicos/pc-gamer-2.webp",
+    features: ["Consultoria Especializada", "Peças de Qualidade", "Montagem Profissional", "Cable Management"],
+    duration: "4-6 horas"
   },
   {
     icon: HiWifi,
     title: "CONFIGURAÇÃO DE REDES E WI-FI",
-    description:
-      "Sinal de internet fraco ou caindo? Configuramos sua rede doméstica ou empresarial, instalamos repetidores e otimizamos seu roteador para uma conexão estável em todos os locais.",
+    description: "Sinal de internet fraco ou caindo? Configuramos sua rede doméstica ou empresarial, instalamos repetidores e otimizamos seu roteador para uma conexão estável em todos os locais.",
     href: "",
     img: "/images/servicos/wifi.webp",
+    features: ["Wi-Fi Estável", "Configuração Completa", "Repetidores", "Otimização de Sinal"],
+    duration: "1-2 horas"
   },
 ];
 
 export default function ServicesOverview() {
   return (
-    <section className="bg-white py-16 md:py-24 h-auto" id="services">
+    <section className="bg-linear-to-br from-gray-50 to-white py-20 md:py-28" id="services">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Título da Seção */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            ASSISTÊNCIA TÉCNICA NO LOCAL / NÓS VAMOS ATÉ VOCÊ
+        {/* Header da Seção */}
+        <div className="text-center mb-16">
+          <span className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-orange-200">
+            Nossos Serviços
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Assistência Técnica <span className="text-orange-600">Completa</span>
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Conheça nossos principais serviços.
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Serviços especializados com retirada e entrega grátis no local
           </p>
         </div>
 
         {/* Grid de Serviços */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
             <div
               key={service.title}
-              className="flex flex-col items-center bg-gray-50 p-6 rounded-lg shadow-lg text-center transition-all duration-300 gap-5 hover:-translate-y-5 hover:scale-105"
+              className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
             >
-              <Image
-                src={service.img}
-                alt={service.title}
-                width={500}
-                height={500}
-                objectFit="cover"
-                className="h-auto w-full rounded-t-2xl"
-              />
-              <div className="absolute right-0 top-0 transition-all duration-300 ease-in-out">
-<service.icon size={50} className="text-orange-500 mx-auto mb-4" />
+              {/* Imagem do Serviço */}
+              <div className="relative overflow-hidden">
+                <Image
+                  src={service.img}
+                  alt={service.title}
+                  width={400}
+                  height={250}
+                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                  <FaClock className="text-xs" />
+                  {service.duration}
+                </div>
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg">
+                  <service.icon className="text-orange-500 text-2xl" />
+                </div>
               </div>
-              
 
-              <h3 className="text-xl font-semibold text-gray-900 mb-2 flex gap-4 justify-center items-center">
-               {service.title}
-              </h3>
-              <p className="text-gray-600 mb-4">{service.description}</p>
+              {/* Conteúdo do Serviço */}
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                  {service.description}
+                </p>
+
+                {/* Lista de Features */}
+                <div className="mb-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    {service.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                        <span className="text-xs text-gray-600">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Rodapé do Card */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <FaHome className="text-orange-500" />
+                      <span>No local</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FaShieldAlt className="text-orange-500" />
+                      <span>Garantia</span>
+                    </div>
+                  </div>
+                  {/* <Link
+                    href={service.href}
+                    className="group flex items-center gap-2 text-orange-600 font-semibold text-sm hover:text-orange-700 transition-colors"
+                  >
+                    Saiba mais
+                    <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link> */}
+                </div>
+              </div>
             </div>
           ))}
+        </div>
+
+        {/* CTA Final */}
+        <div className="text-center mt-12">
+          <div className="bg-linear-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white shadow-lg">
+            <h3 className="text-2xl font-bold mb-4">Não encontrou o que precisa?</h3>
+            <p className="text-orange-100 mb-6">
+              Entre em contato e teremos prazer em ajudar com sua necessidade específica
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <span>FALAR COM ESPECIALISTA</span>
+              <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
