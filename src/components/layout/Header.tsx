@@ -41,7 +41,7 @@ export default function Header() {
             {/* Logo */}
             <div className="shrink-0 flex items-center">
               <Link href="/" className="flex items-center gap-3 group">
-                <div className="group-hover:scale-110 transition-transform duration-300 hidden md:block">
+                <div className="group-hover:scale-110 transition-transform duration-300">
                   <Image
                     src="/images/guga_logo.png"
                     alt="GugaTech Fortaleza Logo"
@@ -83,12 +83,6 @@ export default function Header() {
 
             {/* Botão Menu Móvel */}
             <div className="md:hidden flex items-center gap-4">
-              <button
-                onClick={() => setIsBudgetModalOpen(true)}
-                className="px-4 py-2 bg-orange-500 text-white rounded-lg font-semibold text-sm hover:bg-orange-600 transition-colors"
-              >
-                Orçamento
-              </button>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-gray-700 hover:text-orange-500 focus:outline-none transition-colors duration-200 p-2"
