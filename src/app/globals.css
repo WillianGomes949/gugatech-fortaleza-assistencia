@@ -34,7 +34,7 @@
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-pers-accent);
+  background-color: var(--color-pers-secundary);
 }
 
 *::-webkit-scrollbar-thumb:active {
