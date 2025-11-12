@@ -41,13 +41,13 @@ export default function Header() {
             {/* Logo */}
             <div className="shrink-0 flex items-center">
               <Link href="/" className="flex items-center gap-3 group">
-                <div className="bg-orange-500 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300 hidden md:block">
+                <div className="group-hover:scale-110 transition-transform duration-300 hidden md:block">
                   <Image
-                    src="/images/guga-logo.png"
+                    src="/images/guga_logo.png"
                     alt="GugaTech Fortaleza Logo"
                     width={42}
                     height={42}
-                    className="object-contain invert"
+                    className="object-contain"
                      />
                 </div>
                 <div>

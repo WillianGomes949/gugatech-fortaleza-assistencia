@@ -5,7 +5,7 @@ export default function RepairCategories() {
   const categories = [
     {
       title: "SOFTWARE",
-      subtitle: "REPARAR",
+      subtitle: "REPARO",
       description: "Formatação, remoção de vírus, instalação de programas, otimização de sistema.",
       features: [
         "Formatação Windows/Mac",
@@ -21,7 +21,7 @@ export default function RepairCategories() {
     },
     {
       title: "HARDWARE",
-      subtitle: "REPARAR",
+      subtitle: "REPARO",
       description: "Troca de peças, conserto de placa-mãe, upgrade de componentes, reparos em geral.",
       features: [
         "Troca de Peças",
@@ -74,12 +74,12 @@ export default function RepairCategories() {
                     <category.icon className="text-white text-3xl" />
                   </div>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-white mb-2 drop-shadow-lg">
-                  {category.title}
-                </h2>
                 <h3 className="text-2xl md:text-3xl font-bold text-orange-300 mb-4">
                   {category.subtitle}
                 </h3>
+                <h2 className="text-4xl md:text-5xl font-black text-white mb-2 drop-shadow-lg">
+                  {category.title}
+                </h2>
                 <p className="text-lg text-white/90 max-w-md mx-auto">
                   {category.description}
                 </p>
@@ -111,9 +111,9 @@ export default function RepairCategories() {
 
         {/* Footer da Seção */}
         <div className="text-center mt-12">
-          <p className="text-gray-400 text-sm">
-            ⚡ Atendimento rápido | 🔧 Profissionais qualificados | 🛡️ Garantia no serviço
-          </p>
+          <h3 className="text-gray-400 text-sm">
+            Atendimento rápido | Profissionais qualificados | Garantia no serviço
+          </h3>
         </div>
       </div>
     </section>
