@@ -20,6 +20,10 @@ export default function AddBudget() {
   const [items, setItems] = useState<BudgetItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+ 
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
   useEffect(() => {
     const storedItems = localStorage.getItem(STORAGE_KEY);
@@ -52,13 +56,64 @@ export default function AddBudget() {
       alert("Adicione pelo menos um serviço ao orçamento.");
       return;
     }
-
+    if (!customerName || !customerPhone) {
+      alert("Por favor, preencha seu Nome e Telefone.");
+      return;
+    }
     setIsSubmitting(true);
 
     try {
-      // Simulação de envio para API
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // 1. ENVIAR PARA O SANITY (via API Route)
+      const response = await fetch("/api/submit-budget", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customerName,
+          customerPhone,
+          additionalNotes,
+          items,
+        }),
+      });
 
+      if (!response.ok) {
+        // Se a API falhar, não continua
+        throw new Error("Falha ao salvar o orçamento.");
+      }
+
+      // 2. SE SUCESSO, ENVIAR PARA O WHATSAPP
+      const message = `Olá! Gostaria de solicitar um orçamento para os seguintes serviços:\n\n${items
+        .map(
+          (item) =>
+            `• ${item.name} (x${item.quantity})${
+              item.notes ? ` - ${item.notes}` : ""
+            }`
+        )
+        .join(
+          "\n"
+        )}\n\n*Meus Dados:*\nNome: ${customerName}\nTelefone: ${customerPhone}${
+        additionalNotes ? `\nObs: ${additionalNotes}` : ""
+      }\n\nTotal: ${items.length} serviço(s)`;
+
+      const whatsappUrl = `https://wa.me/558598228544?text=${encodeURIComponent(
+        message
+      )}`;
+      window.open(whatsappUrl, "_blank");
+
+      // 3. LIMPAR TUDO
+      updateItems([]);
+      setCustomerName("");
+      setCustomerPhone("");
+      setAdditionalNotes("");
+      setCurrentStep(1);
+    } catch (error) {
+      console.error(error);
+      alert("Houve um erro ao enviar seu orçamento. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
       // Envio para WhatsApp
       const message = `Olá! Gostaria de solicitar um orçamento para os seguintes serviços:\n\n${items
         .map(
@@ -74,16 +129,6 @@ export default function AddBudget() {
       )}`;
       window.open(whatsappUrl, "_blank");
 
-      // Limpa após envio
-      updateItems([]);
-      setCurrentStep(1);
-    } catch (error) {
-      console.error(error);
-      alert("Houve um erro ao enviar seu orçamento. Tente novamente.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
   return (
     <div className="relative bg-white rounded-2xl shadow-2xl p-2 py-24 md:max-w-5/6 mx-auto">
       {/* Header */}
@@ -168,6 +213,10 @@ export default function AddBudget() {
                   type="text"
                   placeholder="Seu nome completo"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  // CONECTAR ESTADO
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  required
                 />
               </div>
 
@@ -179,6 +228,10 @@ export default function AddBudget() {
                   type="tel"
                   placeholder="(85) 99999-9999"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  // CONECTAR ESTADO
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -191,6 +244,9 @@ export default function AddBudget() {
                 rows={3}
                 placeholder="Alguma informação adicional que devemos saber..."
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-none"
+                // CONECTAR ESTADO
+                value={additionalNotes}
+                onChange={(e) => setAdditionalNotes(e.target.value)}
               />
             </div>
           </div>

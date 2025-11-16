@@ -1,8 +1,11 @@
 // components/AddBudgetItem.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Adicionar useEffect
 import { FaPlus, FaTools, FaLaptop, FaShieldAlt, FaWifi } from "react-icons/fa";
+import { sanityClient } from "@/lib/sanity.client"; // Importar o client PÚBLICO
+import { groq } from "next-sanity"; // Para escrever queries
+
 
 type NewItemData = {
   name: string;
@@ -15,19 +18,60 @@ interface AddBudgetItemProps {
   onAddItem: (data: NewItemData) => void;
 }
 
-const serviceCategories = [
-  { value: "formatacao", label: "Formatação", icon: FaLaptop },
-  { value: "manutencao", label: "Manutenção", icon: FaTools },
-  { value: "seguranca", label: "Segurança", icon: FaShieldAlt },
-  { value: "rede", label: "Rede/Wi-Fi", icon: FaWifi },
-  { value: "outro", label: "Outro", icon: FaPlus },
-];
+// Mapeamento de ícones (agora usado dinamicamente)
+const iconMap: { [key: string]: React.ComponentType<any> } = {
+  formatacao: FaLaptop,
+  manutencao: FaTools,
+  seguranca: FaShieldAlt,
+  rede: FaWifi,
+  outro: FaPlus,
+};
+
+// Tipos para os dados vindo do Sanity
+type SanityCategory = {
+  label: string;
+  value: { current: string }; // 'value' é um slug, por isso o .current
+};
+
+type SanityPopularService = {
+  name: string;
+};
 
 export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState("");
   const [category, setCategory] = useState("outro");
+
+  // NOVOS ESTADOS PARA DADOS DINÂMICOS
+  const [popularServices, setPopularServices] = useState<string[]>([]);
+  const [serviceCategories, setServiceCategories] = useState<SanityCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // BUSCAR DADOS DO SANITY NO CLIENT
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesQuery = groq`*[_type == "serviceCategory"] | order(label asc) {label, value}`;
+        const popularQuery = groq`*[_type == "popularService"] | order(name asc) {name}`;
+
+        const [categories, popular] = await Promise.all([
+          sanityClient.fetch<SanityCategory[]>(categoriesQuery),
+          sanityClient.fetch<SanityPopularService[]>(popularQuery),
+        ]);
+
+        setServiceCategories(categories);
+        setPopularServices(popular.map((s) => s.name)); // Extrai apenas os nomes
+      } catch (error) {
+        console.error("Falha ao buscar dados do Sanity:", error);
+        // Fallback para os dados antigos se a API falhar? (ou mostrar erro)
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,19 +86,17 @@ export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
     setNotes("");
     setCategory("outro");
   };
+  if (isLoading) {
+    return (
+      <div className="text-center py-10 text-gray-500">
+        Carregando serviços...
+      </div>
+    );
+  }
 
-  const popularServices = [
-    "Formatação Windows + Backup",
-    "Remoção de Vírus",
-    "Limpeza Interna Completa",
-    "Upgrade de Memória RAM",
-    "Instalação de SSD",
-    "Configuração de Rede Wi-Fi",
-  ];
-
-  return (
+ return (
     <div className="space-y-6">
-      {/* Serviços Populares */}
+      {/* Serviços Populares (AGORA DINÂMICO) */}
       <div>
         <h4 className="text-sm font-semibold text-gray-700 mb-3">
           Serviços Populares
@@ -74,21 +116,21 @@ export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Categoria */}
+        {/* Categoria (AGORA DINÂMICO) */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Categoria do Serviço
           </label>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
             {serviceCategories.map((cat) => {
-              const IconComponent = cat.icon;
+              const IconComponent = iconMap[cat.value.current] || FaPlus; // Usa o map de ícones
               return (
                 <button
-                  key={cat.value}
+                  key={cat.value.current}
                   type="button"
-                  onClick={() => setCategory(cat.value)}
+                  onClick={() => setCategory(cat.value.current)}
                   className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-1 ${
-                    category === cat.value
+                    category === cat.value.current
                       ? "border-orange-500 bg-orange-50 text-orange-600"
                       : "border-gray-200 bg-white text-gray-600 hover:border-orange-300"
                   }`}
@@ -100,7 +142,6 @@ export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
             })}
           </div>
         </div>
-
         {/* Nome do Serviço */}
         <div>
           <label
