@@ -114,20 +114,6 @@ export default function AddBudget() {
       setIsSubmitting(false);
     }
   };
-      // Envio para WhatsApp
-      const message = `Olá! Gostaria de solicitar um orçamento para os seguintes serviços:\n\n${items
-        .map(
-          (item) =>
-            `• ${item.name} (x${item.quantity})${
-              item.notes ? ` - ${item.notes}` : ""
-            }`
-        )
-        .join("\n")}\n\nTotal: ${items.length} serviço(s)`;
-
-      const whatsappUrl = `https://wa.me/558598228544?text=${encodeURIComponent(
-        message
-      )}`;
-      window.open(whatsappUrl, "_blank");
 
   return (
     <div className="relative bg-white rounded-2xl shadow-2xl p-2 py-24 md:max-w-5/6 mx-auto">
