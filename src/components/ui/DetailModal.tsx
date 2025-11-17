@@ -119,16 +119,16 @@ return (
         
         {/* Header */}
         {/* 2. MUDANÇA: Adicionado 'shrink-0' para não encolher */}
-        <div className="bg-linear-to-r from-blue-600 to-cyan-600 px-6 py-4 text-white shrink-0">
+        <div className="bg-linear-to-r from-orange-600 to-amber-600 px-6 py-4 text-white shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold">Detalhes do {getTypeLabel()}</h2>
-              <p className="text-blue-100 text-sm mt-1">ID: {displayData._id}</p>
+              <p className="text-orange-100 text-sm mt-1">ID: {displayData._id}</p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="p-2 hover:bg-blue-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-orange-700 rounded-lg transition-colors"
               disabled={isLoading}
             >
               <FaTimes size={20} />
@@ -236,7 +236,7 @@ return (
                   )
                 }
                 disabled={isLoading}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               >
                 {statusOptions[type].map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -252,7 +252,7 @@ return (
                 type="button"
                 onClick={handleSaveStatus}
                 disabled={isLoading || currentStatus === data.status}
-                className="w-full sm:w-auto px-6 py-2 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-6 py-2 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <FaSpinner className="animate-spin" />
@@ -298,8 +298,8 @@ function InfoItem({
 }) {
   return (
     <div className="flex gap-3 items-start">
-      <div className="shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-        <Icon className="text-blue-600 text-base" />
+      <div className="shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mt-1">
+        <Icon className="text-orange-600 text-base" />
       </div>
       <div className="flex-1 min-w-0">
         <label className="block text-sm font-medium text-gray-700 mb-1">
