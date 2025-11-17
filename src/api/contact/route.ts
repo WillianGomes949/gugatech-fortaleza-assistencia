@@ -1,4 +1,5 @@
-import { sanityWriteClient } from '@/lib/sanity.client' // Importa nosso client
+
+import { sanityWriteClient } from '@/lib/sanity.write-client'
 import { NextResponse } from 'next/server'
 
 // Interface para garantir que os dados do corpo da requisição estão corretos

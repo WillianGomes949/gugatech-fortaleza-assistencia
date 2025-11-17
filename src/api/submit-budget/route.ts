@@ -1,8 +1,8 @@
 // app/api/submit-budget/route.ts
 
-import { NextResponse } from "next/server";
-import { sanityWriteClient } from "@/lib/sanity.client"; // Importe seu client de escrita
+import { NextResponse } from "next/server";// Importe seu client de escrita
 import { BudgetItem } from "@/app/budget/page"; // Ajuste o path se necessário
+import { sanityWriteClient } from "@/lib/sanity.write-client";
 
 interface RequestBody {
   customerName: string;
