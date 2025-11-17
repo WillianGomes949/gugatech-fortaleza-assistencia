@@ -185,7 +185,9 @@ export default async function ServicesOverview() {
               específica
             </p>
             <Link
-              href="/"
+              href="https://wa.me/558598228544"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <span>FALAR COM ESPECIALISTA</span>
