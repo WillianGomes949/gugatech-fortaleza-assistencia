@@ -1,20 +1,22 @@
+"use client";
 // src/pages/AdminPage.tsx
 import { useEffect, useState, useCallback } from "react";
 import { sanityClient } from "@/lib/sanity.client";
 import { groq } from "next-sanity";
 
-import { 
-  FaCheck, 
-  FaEye, 
-  FaSpinner, 
-  FaTimes, 
-  FaTrash, 
+import {
+  FaCheck,
+  FaEye,
+  FaSpinner,
+  FaTimes,
+  FaTrash,
   FaEnvelope,
   FaChartBar,
   FaSearch,
   FaFilter,
-  FaListAlt // Novo ícone
+  FaListAlt, // Novo ícone
 } from "react-icons/fa";
+import { DetailModal } from "@/components/ui/DetailModal";
 
 // --- NOSSOS TIPOS REAIS DO SANITY ---
 interface BasePayload {
@@ -24,19 +26,20 @@ interface BasePayload {
   phone: string;
   email: string;
   message?: string;
-  status: 'pending' | 'read' | 'answered' | 'completed';
+  status: "pending" | "read" | "answered" | "completed";
+  _createdAt?: string;
 }
 
-interface BudgetRequestPayload extends BasePayload {
-  _type: 'budgetRequest';
+export interface BudgetRequestPayload extends BasePayload {
+  _type: "budgetRequest";
   customerName: string;
   customerPhone: string;
   additionalNotes: string;
-  items: { _key: string; name: string; quantity: number }[];
+  items: { _key: string; name: string; quantity: number; notes?: string }[];
 }
 
-interface ContactMessagePayload extends BasePayload {
-  _type: 'contactMessage';
+export interface ContactMessagePayload extends BasePayload {
+  _type: "contactMessage";
   email: string;
   message: string;
   serviceType: string;
@@ -45,7 +48,7 @@ interface ContactMessagePayload extends BasePayload {
 // Tipos da UI (o que o componente espera)
 interface AdminDataItem {
   id: string;
-  type: 'budget' | 'contact';
+  type: "budget" | "contact";
   name: string;
   phone: string;
   email: string;
@@ -54,7 +57,6 @@ interface AdminDataItem {
   serviceType?: string;
   rawData: BudgetRequestPayload | ContactMessagePayload;
 }
-
 
 type AdminData = {
   budgets: AdminDataItem[];
@@ -85,38 +87,45 @@ function StatCard({ title, value, icon, color, trend }: StatCardProps) {
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
           {trend !== undefined && (
-            <div className={`flex items-center mt-1 text-sm ${trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              <span>{trend >= 0 ? '↗' : '↘'}</span>
+            <div
+              className={`flex items-center mt-1 text-sm ${trend >= 0 ? "text-green-600" : "text-red-600"}`}
+            >
+              <span>{trend >= 0 ? "↗" : "↘"}</span>
               <span className="ml-1">{Math.abs(trend)}%</span>
             </div>
           )}
         </div>
-        <div className={`p-3 rounded-xl ${color}`}>
-          {icon}
-        </div>
+        <div className={`p-3 rounded-xl ${color}`}>{icon}</div>
       </div>
     </div>
   );
 }
 // ### FIM DO COMPONENTE QUE FALTAVA ###
 
-
 // Componente de Tabela (MODIFICADO para nossos dados)
 interface AdminTableProps {
   data: AdminDataItem[];
-  type: 'budgets' | 'submissions';
+  type: "budgets" | "submissions";
   onViewDetails: (item: AdminDataItem) => void;
   onDelete: (item: AdminDataItem) => void;
   actionLoading: string | null;
 }
 
-function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: AdminTableProps) {
+function AdminTable({
+  data,
+  type,
+  onViewDetails,
+  onDelete,
+  actionLoading,
+}: AdminTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.email && item.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    item.phone.includes(searchTerm)
+  const filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.email &&
+        item.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      item.phone.includes(searchTerm)
   );
 
   if (data.length === 0) {
@@ -126,7 +135,9 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
           <FaEnvelope className="text-gray-400 text-xl" />
         </div>
         <p className="text-gray-500 text-lg">Nenhuma solicitação encontrada</p>
-        <p className="text-gray-400 text-sm mt-1">Quando houver novas solicitações, elas aparecerão aqui.</p>
+        <p className="text-gray-400 text-sm mt-1">
+          Quando houver novas solicitações, elas aparecerão aqui.
+        </p>
       </div>
     );
   }
@@ -159,18 +170,29 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">Cliente</th>
-              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">Contato</th>
               <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">
-                {type === 'budgets' ? 'Nº de Itens' : 'Serviço'}
+                Cliente
               </th>
-              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">Status</th>
-              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">Ações</th>
+              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">
+                Contato
+              </th>
+              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">
+                {type === "budgets" ? "Nº de Itens" : "Serviço"}
+              </th>
+              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">
+                Status
+              </th>
+              <th className="py-4 px-6 text-left font-semibold text-gray-700 uppercase text-xs tracking-wider">
+                Ações
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredData.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50 transition-colors group">
+              <tr
+                key={item.id}
+                className="hover:bg-gray-50 transition-colors group"
+              >
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
@@ -178,7 +200,9 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{item.name}</p>
-                      <p className="text-gray-500 text-sm">ID: {item.id.slice(0, 8)}...</p>
+                      <p className="text-gray-500 text-sm">
+                        ID: {item.id.slice(0, 8)}...
+                      </p>
                     </div>
                   </div>
                 </td>
@@ -186,34 +210,46 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
                   <div className="text-gray-900 font-medium">{item.phone}</div>
                   <div className="text-gray-500 text-sm">{item.email}</div>
                 </td>
-                
+
                 <td className="py-4 px-6">
-                  {type === 'budgets' ? (
-                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-violet-100 text-violet-800">
-                       {item.itemCount} {item.itemCount === 1 ? 'item' : 'itens'}
-                     </span>
+                  {type === "budgets" ? (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-violet-100 text-violet-800">
+                      {item.itemCount} {item.itemCount === 1 ? "item" : "itens"}
+                    </span>
                   ) : (
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {item.serviceType || 'Não especificado'}
+                      {item.serviceType || "Não especificado"}
                     </span>
                   )}
                 </td>
-                
+
                 <td className="py-4 px-6">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize
-                    ${item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      item.status === 'read' ? 'bg-gray-100 text-gray-800' : // Adicionado 'read'
-                      item.status === 'answered' ? 'bg-blue-100 text-blue-800' :
-                      item.status === 'completed' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize
+                    ${
+                      item.status === "pending"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : item.status === "read"
+                          ? "bg-gray-100 text-gray-800" // Adicionado 'read'
+                          : item.status === "answered"
+                            ? "bg-blue-100 text-blue-800"
+                            : item.status === "completed"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    <div className={`w-2 h-2 rounded-full mr-2
-                      ${item.status === 'pending' ? 'bg-yellow-500' :
-                        item.status === 'read' ? 'bg-gray-500' : // Adicionado 'read'
-                        item.status === 'answered' ? 'bg-blue-500' :
-                        item.status === 'completed' ? 'bg-green-500' :
-                        'bg-gray-500'
+                    <div
+                      className={`w-2 h-2 rounded-full mr-2
+                      ${
+                        item.status === "pending"
+                          ? "bg-yellow-500"
+                          : item.status === "read"
+                            ? "bg-gray-500" // Adicionado 'read'
+                            : item.status === "answered"
+                              ? "bg-blue-500"
+                              : item.status === "completed"
+                                ? "bg-green-500"
+                                : "bg-gray-500"
                       }`}
                     ></div>
                     {item.status}
@@ -221,21 +257,29 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 border border-blue-200"
                       title="Ver detalhes"
                       onClick={() => onViewDetails(item)}
                       disabled={!!actionLoading}
                     >
-                      {actionLoading === item.id ? <FaSpinner className="animate-spin" /> : <FaEye />}
+                      {actionLoading === item.id ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaEye />
+                      )}
                     </button>
-                    <button 
+                    <button
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 border border-red-200"
                       title="Excluir"
                       onClick={() => onDelete(item)}
                       disabled={!!actionLoading}
                     >
-                      {actionLoading === item.id ? <FaSpinner className="animate-spin" /> : <FaTrash />}
+                      {actionLoading === item.id ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaTrash />
+                      )}
                     </button>
                   </div>
                 </td>
@@ -250,23 +294,26 @@ function AdminTable({ data, type, onViewDetails, onDelete, actionLoading }: Admi
 
 // Componente de Mensagem de Ação (igual ao seu)
 interface ActionMessageProps {
-  message: { type: 'success' | 'error', text: string } | null;
+  message: { type: "success" | "error"; text: string } | null;
 }
 
 function ActionMessage({ message }: ActionMessageProps) {
   if (!message) return null;
 
   return (
-    <div className={`p-4 rounded-xl border ${
-      message.type === 'success' 
-        ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-        : 'bg-red-50 border-red-200 text-red-800'
-    }`}>
+    <div
+      className={`p-4 rounded-xl border ${
+        message.type === "success"
+          ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+          : "bg-red-50 border-red-200 text-red-800"
+      }`}
+    >
       <div className="flex items-center gap-3">
-        {message.type === 'success' ? 
-          <FaCheck className="text-emerald-600 shrink-0" /> :
+        {message.type === "success" ? (
+          <FaCheck className="text-emerald-600 shrink-0" />
+        ) : (
           <FaTimes className="text-red-600 shrink-0" />
-        }
+        )}
         <span className="font-medium">{message.text}</span>
       </div>
     </div>
@@ -274,15 +321,17 @@ function ActionMessage({ message }: ActionMessageProps) {
 }
 
 // FUNÇÃO DE ADAPTAÇÃO: Converte dados do Sanity para a UI
-const mapSanityDataToUI = (sanityItems: (BudgetRequestPayload | ContactMessagePayload)[]): AdminDataItem[] => {
-  return sanityItems.map(item => {
-    if (item._type === 'budgetRequest') {
+const mapSanityDataToUI = (
+  sanityItems: (BudgetRequestPayload | ContactMessagePayload)[]
+): AdminDataItem[] => {
+  return sanityItems.map((item) => {
+    if (item._type === "budgetRequest") {
       return {
         id: item._id,
-        type: 'budget',
+        type: "budget",
         name: item.customerName,
         phone: item.customerPhone,
-        email: 'N/A', // Budget request não pede email
+        email: "N/A", // Budget request não pede email
         status: item.status,
         itemCount: item.items?.length || 0,
         rawData: item,
@@ -291,7 +340,7 @@ const mapSanityDataToUI = (sanityItems: (BudgetRequestPayload | ContactMessagePa
     // else it's 'contactMessage'
     return {
       id: item._id,
-      type: 'contact',
+      type: "contact",
       name: item.name,
       phone: item.phone,
       email: item.email,
@@ -302,53 +351,56 @@ const mapSanityDataToUI = (sanityItems: (BudgetRequestPayload | ContactMessagePa
   });
 };
 
-
-export function AdminPage() {
+export default function AdminPage() {
   const [data, setData] = useState<AdminData>({ budgets: [], submissions: [] });
   const [loadingStates, setLoadingStates] = useState<LoadingStates>({
     budgets: true,
     submissions: true,
-    actions: false
+    actions: false,
   });
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'budgets' | 'submissions'>('budgets');
+  const [activeTab, setActiveTab] = useState<"budgets" | "submissions">(
+    "budgets"
+  );
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [actionMessage, setActionMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-  
+  const [actionMessage, setActionMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<AdminDataItem | null>(null);
 
   // FETCHDATA MODIFICADO
   const fetchData = useCallback(async () => {
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
       budgets: true,
-      submissions: true
+      submissions: true,
     }));
     setError(null);
-    
+
     try {
       const budgetQuery = groq`*[_type == "budgetRequest"] | order(_createdAt desc)`;
       const contactQuery = groq`*[_type == "contactMessage"] | order(_createdAt desc)`;
 
       const [budgetResponse, submissionsResponse] = await Promise.all([
         sanityClient.fetch<BudgetRequestPayload[]>(budgetQuery),
-        sanityClient.fetch<ContactMessagePayload[]>(contactQuery)
+        sanityClient.fetch<ContactMessagePayload[]>(contactQuery),
       ]);
 
       setData({
         budgets: mapSanityDataToUI(budgetResponse),
-        submissions: mapSanityDataToUI(submissionsResponse)
+        submissions: mapSanityDataToUI(submissionsResponse),
       });
-      
     } catch (err) {
-      console.error('Erro ao carregar dados:', err);
-      setError('Erro de conexão. Verifique sua internet.');
+      console.error("Erro ao carregar dados:", err);
+      setError("Erro de conexão. Verifique sua internet.");
     } finally {
-      setLoadingStates(prev => ({
+      setLoadingStates((prev) => ({
         ...prev,
         budgets: false,
-        submissions: false
+        submissions: false,
       }));
     }
   }, []);
@@ -369,25 +421,29 @@ export function AdminPage() {
   const handleViewDetails = async (item: AdminDataItem) => {
     setSelectedItem(item);
     setIsModalOpen(true);
-    
+
     // Otimização: Marcar como 'lido' se estiver 'pendente'
-    if (item.status === 'pending') {
+    if (item.status === "pending") {
       try {
-        await fetch('/api/admin/update-status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: item.id, status: 'read' }), // Marcar como 'lido'
+        await fetch("/api/admin/update-status", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: item.id, status: "read" }), // Marcar como 'lido'
         });
         // Atualiza a UI localmente para resposta imediata
-        const updateData = (prevData: AdminDataItem[]) => 
-          prevData.map(d => d.id === item.id ? { ...d, status: 'read' } : d);
+        const updateData = (prevData: AdminDataItem[]) =>
+          prevData.map((d) =>
+            d.id === item.id ? { ...d, status: "read" } : d
+          );
 
-        if (item.type === 'budget') {
-          setData(prev => ({ ...prev, budgets: updateData(prev.budgets) }));
+        if (item.type === "budget") {
+          setData((prev) => ({ ...prev, budgets: updateData(prev.budgets) }));
         } else {
-          setData(prev => ({ ...prev, submissions: updateData(prev.submissions) }));
+          setData((prev) => ({
+            ...prev,
+            submissions: updateData(prev.submissions),
+          }));
         }
-        
       } catch (err) {
         console.error("Falha ao marcar como 'lido'", err);
       }
@@ -403,25 +459,30 @@ export function AdminPage() {
   // Função para lidar com sucesso na edição (MODIFICADO)
   const handleSaveSuccess = async (newStatus: string) => {
     setIsModalOpen(false);
-    
+
     if (!selectedItem) return;
 
     // Chamar nossa nova API de atualização
     try {
-      const response = await fetch('/api/admin/update-status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin/update-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: selectedItem.id, status: newStatus }),
       });
 
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
 
-      setActionMessage({ type: 'success', text: 'Status atualizado com sucesso!' });
+      setActionMessage({
+        type: "success",
+        text: "Status atualizado com sucesso!",
+      });
       await fetchData(); // Recarregar dados
-
     } catch (err: any) {
-      setActionMessage({ type: 'error', text: err.message || 'Erro ao atualizar.' });
+      setActionMessage({
+        type: "error",
+        text: err.message || "Erro ao atualizar.",
+      });
     } finally {
       setSelectedItem(null);
     }
@@ -429,47 +490,47 @@ export function AdminPage() {
 
   // Função de deletar (MODIFICADO)
   const handleDelete = async (item: AdminDataItem) => {
-    if (!confirm(`Tem certeza que deseja excluir a solicitação de ${item.name}?`)) {
+    if (
+      !confirm(`Tem certeza que deseja excluir a solicitação de ${item.name}?`)
+    ) {
       return;
     }
 
     setActionLoading(item.id);
     setActionMessage(null);
-    
+
     try {
       // Chamar nossa nova API de delete
-      const response = await fetch('/api/admin/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: item.id }),
       });
 
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
-      
-      setActionMessage({ type: 'success', text: result.message });
+
+      setActionMessage({ type: "success", text: result.message });
       await fetchData(); // Recarregar dados
-      
     } catch (err: any) {
-      console.error('Erro ao deletar:', err);
-      setActionMessage({ type: 'error', text: err.message || 'Erro ao excluir item.' });
+      console.error("Erro ao deletar:", err);
+      setActionMessage({
+        type: "error",
+        text: err.message || "Erro ao excluir item.",
+      });
     } finally {
       setActionLoading(null);
     }
   };
 
   const isLoading = loadingStates.budgets && loadingStates.submissions;
-  const currentData = activeTab === 'budgets' ? data.budgets : data.submissions;
+  const currentData = activeTab === "budgets" ? data.budgets : data.submissions;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50 pt-20">
       <div className="container mx-auto px-4 md:px-6 py-8">
-        
-        <SectionTitle
-          subtitle="Painel Administrativo"
-          title="Gerenciamento de Solicitações"
-          className="mb-8 text-center"
-        />
+        <h2 className="mb-8 text-center">Gerenciamento de Solicitações</h2>
+        <p>Painel Administrativo</p>
 
         {/* Statistics Cards (MODIFICADO) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -497,21 +558,21 @@ export function AdminPage() {
         <div className="flex justify-center mb-8">
           <div className="bg-white rounded-2xl shadow-sm p-2 border border-gray-200">
             <button
-              onClick={() => setActiveTab('budgets')}
+              onClick={() => setActiveTab("budgets")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
-                activeTab === 'budgets'
-                  ? 'bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                  : 'text-gray-600 hover:bg-gray-100'
+                activeTab === "budgets"
+                  ? "bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Orçamentos
             </button>
             <button
-              onClick={() => setActiveTab('submissions')}
+              onClick={() => setActiveTab("submissions")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
-                activeTab === 'submissions'
-                  ? 'bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                  : 'text-gray-600 hover:bg-gray-100'
+                activeTab === "submissions"
+                  ? "bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Mensagens
@@ -521,17 +582,19 @@ export function AdminPage() {
 
         {/* Content (MODIFICADO) */}
         <div className="space-y-6">
-          {error && (
-            <ActionMessage message={{ type: 'error', text: error }} />
-          )}
+          {error && <ActionMessage message={{ type: "error", text: error }} />}
           <ActionMessage message={actionMessage} />
 
           {isLoading ? (
-             <div className="flex justify-center items-center p-16 bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex justify-center items-center p-16 bg-white rounded-2xl shadow-sm border border-gray-100">
               <div className="text-center">
                 <FaSpinner className="animate-spin size-8 text-blue-600 mx-auto mb-4" />
-                <p className="text-gray-600 text-lg">Carregando solicitações...</p>
-                <p className="text-gray-400 text-sm mt-1">Isso pode levar alguns segundos</p>
+                <p className="text-gray-600 text-lg">
+                  Carregando solicitações...
+                </p>
+                <p className="text-gray-400 text-sm mt-1">
+                  Isso pode levar alguns segundos
+                </p>
               </div>
             </div>
           ) : (
@@ -545,7 +608,6 @@ export function AdminPage() {
           )}
         </div>
       </div>
-
       {/* Modal (MODIFICADO) */}
       {isModalOpen && selectedItem && (
         <DetailModal
@@ -553,7 +615,9 @@ export function AdminPage() {
           onClose={handleCloseModal}
           // Adaptamos os dados para o modal
           data={selectedItem.rawData}
-          type={selectedItem.type === 'budget' ? 'budgetRequest' : 'contactMessage'}
+          type={
+            selectedItem.type === "budget" ? "budgetRequest" : "contactMessage"
+          }
           onSaveSuccess={handleSaveSuccess}
         />
       )}
