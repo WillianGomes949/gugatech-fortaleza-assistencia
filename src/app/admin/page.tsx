@@ -1,6 +1,8 @@
+// app/admin/page.tsx
 "use client";
-// src/pages/AdminPage.tsx
+
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { sanityClient } from "@/lib/sanity.client";
 import { groq } from "next-sanity";
 
@@ -14,11 +16,11 @@ import {
   FaChartBar,
   FaSearch,
   FaFilter,
-  FaListAlt, // Novo ícone
+  FaListAlt,
 } from "react-icons/fa";
 import { DetailModal } from "@/components/ui/DetailModal";
 
-// --- NOSSOS TIPOS REAIS DO SANITY ---
+// --- TIPOS ---
 interface BasePayload {
   _id: string;
   _type: string;
@@ -45,7 +47,6 @@ export interface ContactMessagePayload extends BasePayload {
   serviceType: string;
 }
 
-// Tipos da UI (o que o componente espera)
 interface AdminDataItem {
   id: string;
   type: "budget" | "contact";
@@ -69,40 +70,29 @@ type LoadingStates = {
   actions: boolean;
 };
 
-// Componente de Card de Estatística (igual ao seu)
+// Componente de Card de Estatística
 interface StatCardProps {
   title: string;
   value: number;
   icon: React.ReactNode;
   color: string;
-  trend?: number; // Mantido do seu original
 }
 
-// ### COMPONENTE QUE FALTAVA ###
-function StatCard({ title, value, icon, color, trend }: StatCardProps) {
+function StatCard({ title, value, icon, color }: StatCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-          {trend !== undefined && (
-            <div
-              className={`flex items-center mt-1 text-sm ${trend >= 0 ? "text-green-600" : "text-red-600"}`}
-            >
-              <span>{trend >= 0 ? "↗" : "↘"}</span>
-              <span className="ml-1">{Math.abs(trend)}%</span>
-            </div>
-          )}
         </div>
         <div className={`p-3 rounded-xl ${color}`}>{icon}</div>
       </div>
     </div>
   );
 }
-// ### FIM DO COMPONENTE QUE FALTAVA ###
 
-// Componente de Tabela (MODIFICADO para nossos dados)
+// Componente de Tabela
 interface AdminTableProps {
   data: AdminDataItem[];
   type: "budgets" | "submissions";
@@ -123,8 +113,7 @@ function AdminTable({
   const filteredData = data.filter(
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.email &&
-        item.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.email && item.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
       item.phone.includes(searchTerm)
   );
 
@@ -144,7 +133,6 @@ function AdminTable({
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      {/* Header da Tabela com Busca */}
       <div className="p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-2">
@@ -230,12 +218,12 @@ function AdminTable({
                       item.status === "pending"
                         ? "bg-yellow-100 text-yellow-800"
                         : item.status === "read"
-                          ? "bg-gray-100 text-gray-800" // Adicionado 'read'
-                          : item.status === "answered"
-                            ? "bg-blue-100 text-blue-800"
-                            : item.status === "completed"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
+                        ? "bg-gray-100 text-gray-800"
+                        : item.status === "answered"
+                        ? "bg-blue-100 text-blue-800"
+                        : item.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
                     }`}
                   >
                     <div
@@ -244,12 +232,12 @@ function AdminTable({
                         item.status === "pending"
                           ? "bg-yellow-500"
                           : item.status === "read"
-                            ? "bg-gray-500" // Adicionado 'read'
-                            : item.status === "answered"
-                              ? "bg-blue-500"
-                              : item.status === "completed"
-                                ? "bg-green-500"
-                                : "bg-gray-500"
+                          ? "bg-gray-500"
+                          : item.status === "answered"
+                          ? "bg-blue-500"
+                          : item.status === "completed"
+                          ? "bg-green-500"
+                          : "bg-gray-500"
                       }`}
                     ></div>
                     {item.status}
@@ -292,7 +280,7 @@ function AdminTable({
   );
 }
 
-// Componente de Mensagem de Ação (igual ao seu)
+// Componente de Mensagem de Ação
 interface ActionMessageProps {
   message: { type: "success" | "error"; text: string } | null;
 }
@@ -320,7 +308,7 @@ function ActionMessage({ message }: ActionMessageProps) {
   );
 }
 
-// FUNÇÃO DE ADAPTAÇÃO: Converte dados do Sanity para a UI
+// Função de adaptação
 const mapSanityDataToUI = (
   sanityItems: (BudgetRequestPayload | ContactMessagePayload)[]
 ): AdminDataItem[] => {
@@ -331,13 +319,12 @@ const mapSanityDataToUI = (
         type: "budget",
         name: item.customerName,
         phone: item.customerPhone,
-        email: "N/A", // Budget request não pede email
+        email: "N/A",
         status: item.status,
         itemCount: item.items?.length || 0,
         rawData: item,
       };
     }
-    // else it's 'contactMessage'
     return {
       id: item._id,
       type: "contact",
@@ -352,6 +339,7 @@ const mapSanityDataToUI = (
 };
 
 export default function AdminPage() {
+  const router = useRouter();
   const [data, setData] = useState<AdminData>({ budgets: [], submissions: [] });
   const [loadingStates, setLoadingStates] = useState<LoadingStates>({
     budgets: true,
@@ -359,20 +347,41 @@ export default function AdminPage() {
     actions: false,
   });
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"budgets" | "submissions">(
-    "budgets"
-  );
+  const [activeTab, setActiveTab] = useState<"budgets" | "submissions">("budgets");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [actionMessage, setActionMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<AdminDataItem | null>(null);
 
-  // FETCHDATA MODIFICADO
+  // Verificar autenticação
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/verify");
+        if (res.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+          router.push("/admin/login");
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
+        router.push("/admin/login");
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  // Fetch data
   const fetchData = useCallback(async () => {
+    if (!isAuthenticated) return;
+
     setLoadingStates((prev) => ({
       ...prev,
       budgets: true,
@@ -403,13 +412,15 @@ export default function AdminPage() {
         submissions: false,
       }));
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (isAuthenticated) {
+      fetchData();
+    }
+  }, [fetchData, isAuthenticated]);
 
-  // Cleanup de timeouts (igual ao seu)
+  // Cleanup de timeouts
   useEffect(() => {
     if (actionMessage) {
       const timer = setTimeout(() => setActionMessage(null), 5000);
@@ -417,20 +428,19 @@ export default function AdminPage() {
     }
   }, [actionMessage]);
 
-  // Abrir o modal (MODIFICADO)
+  // Handlers
   const handleViewDetails = async (item: AdminDataItem) => {
     setSelectedItem(item);
     setIsModalOpen(true);
 
-    // Otimização: Marcar como 'lido' se estiver 'pendente'
     if (item.status === "pending") {
       try {
         await fetch("/api/admin/update-status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: item.id, status: "read" }), // Marcar como 'lido'
+          body: JSON.stringify({ id: item.id, status: "read" }),
         });
-        // Atualiza a UI localmente para resposta imediata
+        
         const updateData = (prevData: AdminDataItem[]) =>
           prevData.map((d) =>
             d.id === item.id ? { ...d, status: "read" } : d
@@ -450,19 +460,16 @@ export default function AdminPage() {
     }
   };
 
-  // Fechar o modal (igual ao seu)
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
 
-  // Função para lidar com sucesso na edição (MODIFICADO)
   const handleSaveSuccess = async (newStatus: string) => {
     setIsModalOpen(false);
 
     if (!selectedItem) return;
 
-    // Chamar nossa nova API de atualização
     try {
       const response = await fetch("/api/admin/update-status", {
         method: "POST",
@@ -477,7 +484,7 @@ export default function AdminPage() {
         type: "success",
         text: "Status atualizado com sucesso!",
       });
-      await fetchData(); // Recarregar dados
+      await fetchData();
     } catch (err: any) {
       setActionMessage({
         type: "error",
@@ -488,11 +495,8 @@ export default function AdminPage() {
     }
   };
 
-  // Função de deletar (MODIFICADO)
   const handleDelete = async (item: AdminDataItem) => {
-    if (
-      !confirm(`Tem certeza que deseja excluir a solicitação de ${item.name}?`)
-    ) {
+    if (!confirm(`Tem certeza que deseja excluir a solicitação de ${item.name}?`)) {
       return;
     }
 
@@ -500,7 +504,6 @@ export default function AdminPage() {
     setActionMessage(null);
 
     try {
-      // Chamar nossa nova API de delete
       const response = await fetch("/api/admin/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -511,7 +514,7 @@ export default function AdminPage() {
       if (!response.ok) throw new Error(result.message);
 
       setActionMessage({ type: "success", text: result.message });
-      await fetchData(); // Recarregar dados
+      await fetchData();
     } catch (err: any) {
       console.error("Erro ao deletar:", err);
       setActionMessage({
@@ -523,21 +526,39 @@ export default function AdminPage() {
     }
   };
 
+  // Loading de autenticação
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null; // Já foi redirecionado para o login
+  }
+
   const isLoading = loadingStates.budgets && loadingStates.submissions;
   const currentData = activeTab === "budgets" ? data.budgets : data.submissions;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50 pt-20">
       <div className="container mx-auto px-4 md:px-6 py-8">
-        <h2 className="mb-8 text-center">Gerenciamento de Solicitações</h2>
-        <p>Painel Administrativo</p>
+        <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">
+          Gerenciamento de Solicitações
+        </h1>
+        <p className="text-center text-gray-600 mb-8">Painel Administrativo</p>
 
-        {/* Statistics Cards (MODIFICADO) */}
+        {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatCard
             title="Total de Orçamentos"
             value={data.budgets.length}
-            icon={<FaListAlt className="text-white text-xl" />} // Ícone mudado
+            icon={<FaListAlt className="text-white text-xl" />}
             color="bg-linear-to-r from-blue-500 to-blue-600"
           />
           <StatCard
@@ -554,7 +575,7 @@ export default function AdminPage() {
           />
         </div>
 
-        {/* Tab Navigation (MODIFICADO) */}
+        {/* Tab Navigation */}
         <div className="flex justify-center mb-8">
           <div className="bg-white rounded-2xl shadow-sm p-2 border border-gray-200">
             <button
@@ -580,7 +601,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Content (MODIFICADO) */}
+        {/* Content */}
         <div className="space-y-6">
           {error && <ActionMessage message={{ type: "error", text: error }} />}
           <ActionMessage message={actionMessage} />
@@ -608,16 +629,14 @@ export default function AdminPage() {
           )}
         </div>
       </div>
-      {/* Modal (MODIFICADO) */}
+
+      {/* Modal */}
       {isModalOpen && selectedItem && (
         <DetailModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          // Adaptamos os dados para o modal
           data={selectedItem.rawData}
-          type={
-            selectedItem.type === "budget" ? "budgetRequest" : "contactMessage"
-          }
+          type={selectedItem.type === "budget" ? "budgetRequest" : "contactMessage"}
           onSaveSuccess={handleSaveSuccess}
         />
       )}

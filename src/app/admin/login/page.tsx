@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaShieldAlt } from "react-icons/fa"; // Ícone de exemplo
+import { FaShieldAlt } from "react-icons/fa";
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
@@ -17,7 +17,6 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      // 3. Envia a senha para a nossa API de "Porteiro"
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,9 +24,10 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        // 4. Se a senha estiver correta, a API cria o cookie.
-        // O router.push() agora vai funcionar, pois o Middleware vai ver o cookie.
+        // Redireciona para a página admin principal
         router.push("/admin");
+        // Força o reload para garantir que o middleware detecte o cookie
+        router.refresh();
       } else {
         const data = await res.json();
         setError(data.message || "Senha incorreta.");
@@ -69,19 +69,30 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full p-3 mt-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 text-center"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-center"
               placeholder="Digite sua senha"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+          {error && (
+            <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded-lg">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-colors disabled:opacity-50"
+            className="w-full py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Verificando..." : "Entrar"}
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Verificando...
+              </span>
+            ) : (
+              "Entrar"
+            )}
           </button>
         </form>
       </div>
