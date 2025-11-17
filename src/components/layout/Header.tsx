@@ -10,9 +10,9 @@ import Image from "next/image";
 
 const navLinks = [
   { name: "Início", href: "/", icon: FaHouse },
-  { name: "Sobre Nós", href: "#about", icon: FaUsers },
-  { name: "Serviços", href: "#services", icon: FaTools },
-  { name: "Contato", href: "#contact", icon: FaEnvelope },
+  { name: "Sobre Nós", href: "/#about", icon: FaUsers },
+  { name: "Serviços", href: "/#services", icon: FaTools },
+  { name: "Contato", href: "/#contact", icon: FaEnvelope },
 ];
 
 export default function Header() {
