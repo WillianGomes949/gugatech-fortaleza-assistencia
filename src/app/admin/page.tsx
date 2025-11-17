@@ -148,7 +148,7 @@ function AdminTable({
               placeholder="Buscar por nome, email ou telefone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -183,7 +183,7 @@ function AdminTable({
               >
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    <div className="w-8 h-8 bg-linear-to-r from-orange-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {item.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -205,7 +205,7 @@ function AdminTable({
                       {item.itemCount} {item.itemCount === 1 ? "item" : "itens"}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                       {item.serviceType || "Não especificado"}
                     </span>
                   )}
@@ -220,7 +220,7 @@ function AdminTable({
                         : item.status === "read"
                         ? "bg-gray-100 text-gray-800"
                         : item.status === "answered"
-                        ? "bg-blue-100 text-blue-800"
+                        ? "bg-orange-100 text-orange-800"
                         : item.status === "completed"
                         ? "bg-green-100 text-green-800"
                         : "bg-gray-100 text-gray-800"
@@ -234,7 +234,7 @@ function AdminTable({
                           : item.status === "read"
                           ? "bg-gray-500"
                           : item.status === "answered"
-                          ? "bg-blue-500"
+                          ? "bg-orange-500"
                           : item.status === "completed"
                           ? "bg-green-500"
                           : "bg-gray-500"
@@ -246,7 +246,7 @@ function AdminTable({
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
                     <button
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 border border-blue-200"
+                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50 border border-orange-200"
                       title="Ver detalhes"
                       onClick={() => onViewDetails(item)}
                       disabled={!!actionLoading}
@@ -531,7 +531,7 @@ export default function AdminPage() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Verificando autenticação...</p>
         </div>
       </div>
@@ -546,7 +546,7 @@ export default function AdminPage() {
   const currentData = activeTab === "budgets" ? data.budgets : data.submissions;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50 pt-20">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-orange-50 pt-20">
       <div className="container mx-auto px-4 md:px-6 py-8">
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">
           Gerenciamento de Solicitações
@@ -559,7 +559,7 @@ export default function AdminPage() {
             title="Total de Orçamentos"
             value={data.budgets.length}
             icon={<FaListAlt className="text-white text-xl" />}
-            color="bg-linear-to-r from-blue-500 to-blue-600"
+            color="bg-linear-to-r from-orange-500 to-orange-600"
           />
           <StatCard
             title="Mensagens de Contato"
@@ -582,7 +582,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("budgets")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "budgets"
-                  ? "bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25"
+                  ? "bg-linear-to-r from-orange-500 to-cyan-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -592,7 +592,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("submissions")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "submissions"
-                  ? "bg-linear-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25"
+                  ? "bg-linear-to-r from-orange-500 to-cyan-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -609,7 +609,7 @@ export default function AdminPage() {
           {isLoading ? (
             <div className="flex justify-center items-center p-16 bg-white rounded-2xl shadow-sm border border-gray-100">
               <div className="text-center">
-                <FaSpinner className="animate-spin size-8 text-blue-600 mx-auto mb-4" />
+                <FaSpinner className="animate-spin size-8 text-orange-600 mx-auto mb-4" />
                 <p className="text-gray-600 text-lg">
                   Carregando solicitações...
                 </p>
