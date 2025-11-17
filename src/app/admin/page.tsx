@@ -183,7 +183,7 @@ function AdminTable({
               >
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-linear-to-r from-orange-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    <div className="w-8 h-8 bg-linear-to-r from-orange-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {item.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -565,7 +565,7 @@ export default function AdminPage() {
             title="Mensagens de Contato"
             value={data.submissions.length}
             icon={<FaEnvelope className="text-white text-xl" />}
-            color="bg-linear-to-r from-cyan-500 to-cyan-600"
+            color="bg-linear-to-r from-orange-500 to-orange-600"
           />
           <StatCard
             title="Total de Solicitações"
@@ -582,7 +582,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("budgets")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "budgets"
-                  ? "bg-linear-to-r from-orange-500 to-cyan-500 text-white shadow-lg shadow-orange-500/25"
+                  ? "bg-linear-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -592,7 +592,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("submissions")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "submissions"
-                  ? "bg-linear-to-r from-orange-500 to-cyan-500 text-white shadow-lg shadow-orange-500/25"
+                  ? "bg-linear-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
