@@ -14,7 +14,7 @@ if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
   throw new Error("Missing NEXT_PUBLIC_SANITY_DATASET");
 }
 if (!process.env.SANITY_API_TOKEN) {
-  throw new Error("Missing SANITY_API_TOKEN");
+  throw new Error("Missing NEXT_SANITY_API_TOKEN");
 }
 
 // Client PÚBLICO (para ler dados)
@@ -32,5 +32,5 @@ export const sanityWriteClient = createClient({
   dataset,
   apiVersion,
   useCdn: false,
-  token: process.env.SANITY_API_TOKEN,
+  token: process.env.NEXT_SANITY_API_TOKEN,
 });
