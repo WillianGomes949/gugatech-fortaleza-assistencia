@@ -26,6 +26,7 @@ export async function POST(request: Request) {
 
     // Formata os itens para o schema do Sanity (sem o 'id' do React)
     const formattedItems = items.map((item) => ({
+      _key: item.id,
       _type: "object", // Sanity precisa saber o tipo
       name: item.name,
       quantity: item.quantity,

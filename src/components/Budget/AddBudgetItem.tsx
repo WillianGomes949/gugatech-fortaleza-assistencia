@@ -33,9 +33,9 @@ type SanityCategory = {
   value: { current: string }; // 'value' é um slug, por isso o .current
 };
 
-type SanityPopularService = {
-  name: string;
-};
+type SanityService = {
+  title: string;
+}
 
 export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
   const [name, setName] = useState("");
@@ -53,15 +53,15 @@ export default function AddBudgetItem({ onAddItem }: AddBudgetItemProps) {
     const fetchData = async () => {
       try {
         const categoriesQuery = groq`*[_type == "serviceCategory"] | order(label asc) {label, value}`;
-        const popularQuery = groq`*[_type == "popularService"] | order(name asc) {name}`;
+        const servicesQuery = groq`*[_type == "service"] | order(title asc) {title}`;
 
-        const [categories, popular] = await Promise.all([
+        const [categories, services] = await Promise.all([
           sanityClient.fetch<SanityCategory[]>(categoriesQuery),
-          sanityClient.fetch<SanityPopularService[]>(popularQuery),
+          sanityClient.fetch<SanityService[]>(servicesQuery),
         ]);
 
         setServiceCategories(categories);
-        setPopularServices(popular.map((s) => s.name)); // Extrai apenas os nomes
+        setPopularServices(services.map((s) => s.title)); // Extrai apenas os nomes
       } catch (error) {
         console.error("Falha ao buscar dados do Sanity:", error);
         // Fallback para os dados antigos se a API falhar? (ou mostrar erro)
