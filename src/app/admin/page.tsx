@@ -246,7 +246,7 @@ function AdminTable({
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
                     <button
-                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50 border border-orange-200"
+                      className="p-2 text-blue-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50 border border-orange-200"
                       title="Ver detalhes"
                       onClick={() => onViewDetails(item)}
                       disabled={!!actionLoading}
