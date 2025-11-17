@@ -30,6 +30,6 @@ export const sanityWriteClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
+  useCdn: true,
   token: process.env.NEXT_SANITY_API_TOKEN,
 });
