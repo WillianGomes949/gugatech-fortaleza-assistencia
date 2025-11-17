@@ -155,12 +155,13 @@ export default function Header() {
                 Fazer Orçamento
               </Link>
               <Link
-                  href="/admin"
-                  className="text-white border-gray-300 hover:border-orange-300 bg-orange-200  rounded-xl font-semibold  px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600  hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
-                >
-                  <RiAdminFill size={18} />
-                  Admin
-                </Link>
+                onClick={() => setIsMobileMenuOpen(false)}
+                href="/admin"
+                className="text-white border-gray-300 hover:border-orange-300 bg-orange-200  rounded-xl font-semibold  px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600  hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
+              >
+                <RiAdminFill size={18} />
+                Admin
+              </Link>
             </div>
 
             {/* Contato Rápido no Mobile */}
