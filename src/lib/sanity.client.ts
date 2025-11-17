@@ -7,7 +7,7 @@ if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
 if (!process.env.NEXT_PUBLIC_SANITY_DATASET) {
   throw new Error('Missing NEXT_PUBLIC_SANITY_DATASET')
 }
-if (!process.env.SANITY_API_TOKEN) {
+if (!process.env.NEXT_SANITY_API_TOKEN) {
   throw new Error('Missing SANITY_API_TOKEN')
 }
 
