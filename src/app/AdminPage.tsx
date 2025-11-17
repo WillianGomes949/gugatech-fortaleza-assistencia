@@ -1,22 +1,14 @@
 // src/pages/AdminPage.tsx
-// TOTALMENTE REFEITO PARA SANITY
-
 import { useEffect, useState, useCallback } from "react";
-// 1. IMPORTAR O CLIENT DE LEITURA
 import { sanityClient } from "@/lib/sanity.client";
 import { groq } from "next-sanity";
 
-// --- Seus Componentes de UI (não mudam) ---
-import { SectionTitle } from "../components/ui/SectionTitle";
-import { DetailModal } from "../components/ui/DetailModal"; 
-// --- Seus Ícones (não mudam) ---
 import { 
   FaCheck, 
   FaEye, 
   FaSpinner, 
   FaTimes, 
   FaTrash, 
-  FaCalendarAlt,
   FaEnvelope,
   FaChartBar,
   FaSearch,
