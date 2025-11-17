@@ -42,11 +42,19 @@ export default function ContactForm() {
       });
 
       if (!response.ok) {
-        // Se a resposta da API não for 2xx, joga um erro
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Falha ao enviar mensagem");
+        let errorMsg = `Falha na API: ${response.statusText}`; // Mensagem padrão
+        try {
+          // Tenta ler o JSON. Se falhar, usa a mensagem padrão.
+          const errorData = await response.json();
+          if (errorData.error) {
+            errorMsg = errorData.error;
+          }
+        } catch (jsonError) {
+          // A resposta de erro não era JSON.
+          console.warn("A resposta de erro da API não era JSON.");
+        }
+        throw new Error(errorMsg);
       }
-
       // 3. Sucesso!
       setStatus(FormStatus.Success);
       (e.target as HTMLFormElement).reset(); // Limpa o formulário
