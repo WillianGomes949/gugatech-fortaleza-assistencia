@@ -77,14 +77,13 @@ export default function Header() {
               </Link>
             </div>
             {/* Nav */}
-            <div className="gap-2 lg:gap-4 justify-center items-center hidden md:flex">
+            <div className="gap-4 lg:gap-6 justify-center items-center hidden md:flex">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   className="flex items-center gap-2 text-gray-700 hover:text-orange-500 transition-all duration-200 font-medium group"
                 >
-                  <link.icon className="text-orange-500 group-hover:scale-110 transition-transform duration-200" />
                   <span className="relative">
                     {link.name}
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
@@ -155,6 +154,13 @@ export default function Header() {
                 <FaTools />
                 Fazer Orçamento
               </Link>
+              <Link
+                  href="/admin"
+                  className="text-white border-gray-300 hover:border-orange-300 bg-orange-200  rounded-xl font-semibold  px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600  hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
+                >
+                  <RiAdminFill size={18} />
+                  Admin
+                </Link>
             </div>
 
             {/* Contato Rápido no Mobile */}
