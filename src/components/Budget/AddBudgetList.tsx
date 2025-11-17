@@ -65,22 +65,21 @@ export default function AddBudgetList({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h5 className="font-semibold text-gray-900 text-sm truncate">
+                    <div className="flex justify-between items-center gap-2 mb-1 flex-wrap">
+                      <h5 className="font-semibold text-gray-900 text-sm truncate wrap-anywhere" >
                         {item.name}
                       </h5>
                       <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">
                         x{item.quantity}
                       </span>
                     </div>
-
                     {item.notes && (
                       <p className="text-gray-600 text-sm leading-relaxed">
                         {item.notes}
                       </p>
                     )}
 
-                    <div className="flex items-center gap-4 mt-2">
+                    <div className="flex items-center justify-between gap-4 mt-2">
                       <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                         {item.category === "formatacao" && "Formatação"}
                         {item.category === "manutencao" && "Manutenção"}
@@ -88,11 +87,7 @@ export default function AddBudgetList({
                         {item.category === "rede" && "Rede/Wi-Fi"}
                         {item.category === "outro" && "Outro"}
                       </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <div className="flex items-center gap-1 ml-3 transition-opacity duration-200">
                   {onEditItem && (
                     <button
                       onClick={() => onEditItem(item.id)}
@@ -111,6 +106,11 @@ export default function AddBudgetList({
                     <HiTrash className="h-4 w-4" />
                   </button>
                 </div>
+                    </div>
+                  </div>
+                </div>
+
+                
               </div>
             </div>
           );
