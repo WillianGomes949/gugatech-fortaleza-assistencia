@@ -178,14 +178,14 @@ export default function Footer(){
               </p>
             </div>
             
-            <div className="flex items-center gap-6 text-sm text-gray-400">
+            {/* <div className="flex items-center gap-6 text-sm text-gray-400">
               <Link href="/politica-privacidade" className="hover:text-orange-400 transition-colors">
                 Política de Privacidade
               </Link>
               <Link href="/termos-uso" className="hover:text-orange-400 transition-colors">
                 Termos de Uso
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
