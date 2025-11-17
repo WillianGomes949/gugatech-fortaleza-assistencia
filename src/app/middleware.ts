@@ -3,40 +3,48 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
+  // 1. Tenta pegar o cookie de autenticação
   const cookie = req.cookies.get("admin-auth");
-  const url = req.nextUrl.clone();
+  const url = req.nextUrl.clone(); // Cria uma cópia da URL para podermos mudá-la
 
-  // O usuário está tentando acessar a página de login
+  // 2. O usuário está tentando acessar a própria página de login
   if (url.pathname === "/admin/login") {
-    // Se ele já tiver o cookie, mande ele pro admin
+    // Se ele já ESTIVER logado (tem o cookie), mande ele embora do login
     if (cookie?.value === "true") {
-      url.pathname = "/admin";
+      url.pathname = "/admin"; // Redireciona para o painel
       return NextResponse.redirect(url);
     }
-    // Se não tiver, deixe ele ver a página de login
+    // Se não, deixe ele ver a página de login
     return NextResponse.next();
   }
 
-  // Se ele NÃO tiver o cookie e tentar acessar uma rota protegida...
+  // 3. Se o usuário tentar acessar qualquer outra rota protegida
+  //    e NÃO TIVER o cookie...
   if (cookie?.value !== "true") {
-    // ...redirecione ele para o login.
+    // ...redirecione ele IMEDIATAMENTE para a página de login.
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
 
-  // Se ele tiver o cookie, deixe ele passar
+  // 4. Se ele tem o cookie, deixe ele passar.
   return NextResponse.next();
 }
 
-// O config agora protege /admin E /api/admin,
-// MAS ignora /admin/login.
+// 5. Configuração de quais rotas o "Segurança" deve vigiar
 export const config = {
   matcher: [
-    "/admin",
-    "/admin/:path*",
-    "/api/admin/:path*",
-    // Excluir a rota de login da proteção
-    // para não causar um loop infinito
-    "/((?!admin/login|api/auth/login).*)",
+    /*
+     * Vigie todas essas rotas:
+     */
+    "/admin", // A página principal do admin
+    "/admin/:path*", // Qualquer sub-página (ex: /admin/config)
+    "/api/admin/:path*", // Todas as APIs do admin (delete, update, etc.)
+
+    /*
+     * E garanta que a lógica rode em todas as requisições,
+     * exceto as que o Next.js precisa (como /_next/static)
+     * e a PRÓPRIA API DE LOGIN (para não criar um loop infinito).
+     */
+    "/((?!_next/static|_next/image|favicon.ico|api/auth/login).*)",
   ],
 };
