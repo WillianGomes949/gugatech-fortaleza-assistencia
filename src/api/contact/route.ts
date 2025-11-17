@@ -1,4 +1,4 @@
-import { sanityClient } from '@/lib/sanity.client' // Importa nosso client
+import { sanityWriteClient } from '@/lib/sanity.client' // Importa nosso client
 import { NextResponse } from 'next/server'
 
 // Interface para garantir que os dados do corpo da requisição estão corretos
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     // 3. Enviar o documento para o Sanity
-    await sanityClient.create(doc)
+    await sanityWriteClient.create(doc)
 
     // 4. Retornar sucesso
     return NextResponse.json(
