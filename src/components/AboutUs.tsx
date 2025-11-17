@@ -43,8 +43,8 @@ export default function AboutUs() {
                     Promoção Exclusiva
                   </span>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-sm line-through opacity-80">R$ 120</span>
-                    <h3 className="text-6xl font-black mb-2">R$70</h3>
+                    <span className="text-sm line-through opacity-80">R$ 200</span>
+                    <h3 className="text-6xl font-black mb-2">R$ 150</h3>
                   </div>
                   <p className="text-xl font-bold mb-1">Formatação Completa</p>
                   <p className="text-base opacity-90">Windows + Backup + Otimização</p>

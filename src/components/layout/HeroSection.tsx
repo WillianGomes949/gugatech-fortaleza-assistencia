@@ -104,7 +104,7 @@ export default function HeroSection() {
               {/* Overlay de Destaque */}
               <div className="absolute -bottom-6 -right-6 bg-linear-to-br from-orange-500 to-orange-600 p-6 rounded-2xl shadow-2xl">
                 <div className="text-center text-white">
-                  <div className="text-2xl font-black">R$70</div>
+                  <div className="text-2xl font-black">R$150</div>
                   <div className="text-sm font-semibold">Formatação</div>
                   <div className="text-xs opacity-90">com Backup</div>
                 </div>
