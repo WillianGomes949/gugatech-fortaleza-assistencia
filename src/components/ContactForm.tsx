@@ -1,96 +1,116 @@
 // components/ContactForm.tsx
 "use client";
 
-import Image from "next/image";
-import { FaPaperPlane, FaWhatsapp, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import { FaPaperPlane, } from "react-icons/fa";
+import { useState } from "react"; 
+
+// Enum para os estados do formulário
+enum FormStatus {
+  Idle,      // Ocioso
+  Loading,   // Carregando
+  Success,   // Sucesso
+  Error,     // Erro
+}
 
 export default function ContactForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<FormStatus>(FormStatus.Idle);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Adicione sua lógica de envio aqui
-    alert("Formulário enviado! Em breve entraremos em contato.");
+    setStatus(FormStatus.Loading); // Inicia o carregamento
+    setErrorMessage("");
+
+    // 1. Coletar os dados do formulário
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      serviceType: formData.get("service") as string,
+      message: formData.get("message") as string,
+    };
+
+    try {
+      // 2. Enviar os dados para a nossa API Route
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        // Se a resposta da API não for 2xx, joga um erro
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Falha ao enviar mensagem");
+      }
+
+      // 3. Sucesso!
+      setStatus(FormStatus.Success);
+      (e.target as HTMLFormElement).reset(); // Limpa o formulário
+
+    } catch (error: unknown) { 
+  let errorMessage = "Ocorreu um problema desconhecido";
+
+  // 2. Verifique o tipo
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  }
+  
+  // 3. Use a mensagem segura
+  console.error(errorMessage);
+  setStatus(FormStatus.Error);
+  setErrorMessage(errorMessage);
+}
   };
+
+  // Mensagem de status a ser exibida
+  const getStatusMessage = () => {
+    switch (status) {
+      case FormStatus.Success:
+        return (
+          <p className="text-green-400 text-center text-sm">
+            Mensagem enviada com sucesso! Em breve entraremos em contato.
+          </p>
+        );
+      case FormStatus.Error:
+        return (
+          <p className="text-red-400 text-center text-sm">
+            Erro: {errorMessage}
+          </p>
+        );
+      default:
+        return (
+          <p className="text-gray-400 text-center text-sm">
+            * Respondemos em até 2 horas durante o horário comercial
+          </p>
+        );
+    }
+  };
+
+  const isSubmitting = status === FormStatus.Loading;
 
   return (
     <section className="bg-linear-to-br from-gray-900 to-gray-800 py-20 md:py-28" id="contact">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header da Seção */}
-        <div className="text-center mb-16">
-          <span className="inline-block bg-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-orange-500/30">
-            Fale Conosco
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Pronto para <span className="text-orange-500">Resolver</span> seu Problema?
-          </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Entre em contato e receba um atendimento personalizado
-          </p>
-        </div>
-
+        {/* ... (Header da Seção e Informações de Contato - sem mudanças) ... */}
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
           
-          {/* Informações de Contato */}
+          {/* Informações de Contato (Sem mudanças) */}
           <div className="lg:col-span-1 w-full h-full">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
-              <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                <FaMapMarkerAlt className="text-orange-500" />
-                Nossos Contatos
-              </h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-colors">
-                  <div className="bg-orange-500 p-3 rounded-lg">
-                    <FaWhatsapp className="text-white text-xl" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">WhatsApp</p>
-                    <p className="text-white font-semibold">(85) 99999-9999</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-colors">
-                  <div className="bg-orange-500 p-3 rounded-lg">
-                    <FaPhone className="text-white text-xl" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Telefone</p>
-                    <p className="text-white font-semibold">(85) 3333-3333</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-colors">
-                  <div className="bg-orange-500 p-3 rounded-lg">
-                    <FaMapMarkerAlt className="text-white text-xl" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm">Localização</p>
-                    <p className="text-white font-semibold">Fortaleza - CE</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Logo */}
-              <div className="mt-8 pt-8 border-t border-gray-700">
-                <div className="flex justify-center">
-                  <Image
-                    src="/images/guga_logo_dark.png"
-                    alt="GugaTech Fortaleza"
-                    width={120}
-                    height={50}
-                    className="invert opacity-90"
-                  />
-                </div>
-                <p className="text-gray-400 text-center mt-3 text-sm">
-                  Sua assistência técnica de confiança
-                </p>
-              </div>
-            </div>
+            {/* ... (Todo o seu JSX de informações de contato) ... */}
           </div>
 
           {/* Formulário */}
           <div className="lg:col-span-2 w-full h-full">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* ... (Todos os seus inputs - name, email, phone, service) ... */}
+                
+                {/* Inputs de Exemplo (mantenha os seus) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-white font-medium mb-2">
@@ -103,6 +123,7 @@ export default function ContactForm() {
                       required
                       placeholder="Seu nome completo"
                       className="w-full p-4 rounded-xl bg-gray-700/50 text-white border border-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400"
+                      disabled={isSubmitting} // Desabilitar durante o envio
                     />
                   </div>
                   <div>
@@ -116,6 +137,7 @@ export default function ContactForm() {
                       required
                       placeholder="seu@email.com"
                       className="w-full p-4 rounded-xl bg-gray-700/50 text-white border border-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400"
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -131,6 +153,7 @@ export default function ContactForm() {
                     required
                     placeholder="(85) 99999-9999"
                     className="w-full p-4 rounded-xl bg-gray-700/50 text-white border border-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400"
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -142,6 +165,7 @@ export default function ContactForm() {
                     name="service"
                     id="service"
                     className="w-full p-4 rounded-xl bg-gray-700/50 text-white border border-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300"
+                    disabled={isSubmitting}
                   >
                     <option value="">Selecione o serviço desejado</option>
                     <option value="formatacao">Formatação</option>
@@ -163,20 +187,24 @@ export default function ContactForm() {
                     required
                     placeholder="Descreva seu problema ou necessidade..."
                     className="w-full p-4 rounded-xl bg-gray-700/50 text-white border border-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 placeholder-gray-400 resize-none"
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="group w-full px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105"
+                  className="group w-full px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting} // Desabilitar botão durante o envio
                 >
-                  <span>ENVIAR MENSAGEM</span>
-                  <FaPaperPlane className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <span>
+                    {isSubmitting ? "ENVIANDO..." : "ENVIAR MENSAGEM"}
+                  </span>
+                  {!isSubmitting && <FaPaperPlane className="transition-transform duration-300 group-hover:translate-x-1" />}
                 </button>
 
-                <p className="text-gray-400 text-center text-sm">
-                  * Respondemos em até 2 horas durante o horário comercial
-                </p>
+                {/* Mensagem de Status Dinâmica */}
+                {getStatusMessage()}
+
               </form>
             </div>
           </div>
