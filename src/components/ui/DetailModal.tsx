@@ -111,15 +111,11 @@ export function DetailModal({
   if (!isOpen) return null;
 
 return (
-    <div className=" fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 bg-opacity-50 backdrop-blur-sm">
-      
-      {/* 1. MUDANÇA: Adicionado 'flex flex-col' e 'max-h-[90vh]' (ou 95vh) */}
-      {/* Removemos o 'overflow-auto' daqui. */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white shadow-2xl max-w-2xl w-full animate-in fade-in-90 zoom-in-90 flex flex-col max-h-[90vh] rounded-2xl">
         
         {/* Header */}
-        {/* 2. MUDANÇA: Adicionado 'shrink-0' para não encolher */}
-        <div className="bg-linear-to-r from-orange-600 to-amber-600 px-6 py-4 text-white shrink-0">
+        <div className="rounded-t-2xl bg-linear-to-r from-orange-600 to-amber-600 px-6 py-4 text-white shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold">Detalhes do {getTypeLabel()}</h2>
@@ -137,8 +133,6 @@ return (
         </div>
 
         {/* Content */}
-        {/* 3. MUDANÇA: Removido 'max-h-[calc(...)]'. Deixamos só 'overflow-y-auto' */}
-        {/* O Flexbox vai fazer ele ocupar o espaço que sobrar. */}
         <div className="p-6 overflow-y-auto">
           {/* Informações Pessoais */}
           <Section title="Informações do Cliente">
@@ -217,7 +211,7 @@ return (
 
         {/* Footer */}
         {/* 4. MUDANÇA: Adicionado 'shrink-0' para não encolher */}
-        <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 shrink-0">
+        <div className="rounded-b-2xl border-t border-gray-200 px-6 py-4 bg-gray-50 shrink-0">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             {/* Seletor de Status */}
             <div className="w-full sm:w-auto">
