@@ -7,6 +7,7 @@ import { FaTools, FaUsers, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FaHouse } from "react-icons/fa6";
 import Image from "next/image";
+import { RiAdminFill } from "react-icons/ri";
 
 const navLinks = [
   { name: "Início", href: "/", icon: FaHouse },
@@ -17,7 +18,7 @@ const navLinks = [
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-   const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -44,11 +45,13 @@ export default function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-lg py-2" 
-          : "bg-white py-4"
-      }`}>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
+            : "bg-white py-4"
+        }`}
+      >
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -61,17 +64,20 @@ export default function Header() {
                     width={42}
                     height={42}
                     className="object-contain"
-                     />
+                  />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">GugaTech Fortaleza</h1>
-                  <p className="text-xs text-gray-500 -mt-1">Tecnologia & Soluções</p>
+                  <h1 className="text-xl font-bold text-gray-900">
+                    GugaTech Fortaleza
+                  </h1>
+                  <p className="text-xs text-gray-500 -mt-1">
+                    Tecnologia & Soluções
+                  </p>
                 </div>
               </Link>
             </div>
-
-            {/* Navegação Desktop */}
-            <div className="hidden md:flex md:items-center md:space-x-8">
+            {/* Nav */}
+            <div className="gap-2 lg:gap-4 justify-center items-center hidden md:flex">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -85,13 +91,25 @@ export default function Header() {
                   </span>
                 </Link>
               ))}
-              <Link
-                href="/budget"
-                className="ml-4 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
-              >
-                <FaTools className="text-sm" />
-                Fazer Orçamento
-              </Link>
+            </div>
+            {/* Navegação Desktop */}
+            <div className="hidden md:flex md:items-center md:space-x-8">
+              <div className="gap-2 lg:gap-4 justify-center items-center hidden md:flex">
+                <Link
+                  href="/admin"
+                  className="text-white border-gray-300 hover:border-orange-300 bg-orange-200  rounded-xl font-semibold ml-4 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600  hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
+                >
+                  <RiAdminFill size={18} />
+                  Admin
+                </Link>
+                <Link
+                  href="/budget"
+                  className="ml-4 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2"
+                >
+                  <FaTools className="text-sm" />
+                  Fazer Orçamento
+                </Link>
+              </div>
             </div>
 
             {/* Botão Menu Móvel */}
@@ -113,7 +131,10 @@ export default function Header() {
 
         {/* Menu Móvel (Dropdown) */}
         {isMobileMenuOpen && (
-          <div ref={menuRef} className="md:hidden bg-white/95 backdrop-blur-md shadow-xl absolute top-full left-0 right-0 z-40 border-t border-gray-100">
+          <div
+            ref={menuRef}
+            className="md:hidden bg-white/95 backdrop-blur-md shadow-xl absolute top-full left-0 right-0 z-40 border-t border-gray-100"
+          >
             <div className="px-4 pt-4 pb-6 space-y-2">
               {navLinks.map((link) => (
                 <Link
@@ -129,14 +150,13 @@ export default function Header() {
               <Link
                 onClick={() => setIsMobileMenuOpen(false)}
                 href="/budget"
-               
                 className="w-full flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium text-white bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-200 mt-4"
               >
                 <FaTools />
                 Fazer Orçamento
               </Link>
             </div>
-            
+
             {/* Contato Rápido no Mobile */}
             <div className="px-4 py-4 bg-gray-50 border-t border-gray-100">
               <div className="flex justify-center gap-4">
