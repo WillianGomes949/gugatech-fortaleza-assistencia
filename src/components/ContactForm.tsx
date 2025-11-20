@@ -115,9 +115,9 @@ export default function ContactForm() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* ... (Header da Seção e Informações de Contato - sem mudanças) ... */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto items-center justify-between">
           {/* Informações de Contato (Sem mudanças) */}
-          <div className="lg:col-span-1 w-full h-full">
+          <div className="flex flex-col lg:col-span-1 w-full h-full justify-between">
             {/* Informações de Contato */}
             <div className="space-y-8 px-1">
               <div className="space-y-6">
@@ -216,7 +216,7 @@ export default function ContactForm() {
             </div>
           </div>
           {/* Formulário */}
-          <div className="lg:col-span-2 w-full h-full">
+          <div className="lg:col-span-1 w-full h-full">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Inputs de Exemplo (mantenha os seus) */}

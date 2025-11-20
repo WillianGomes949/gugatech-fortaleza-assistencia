@@ -7,6 +7,7 @@ import ServicesOverview from "@/components/ServicesOverview";
 import RepairCategories from "@/components/RepairCategories";
 import Testimonials from "@/components/Testimonials";
 import TopButton from "@/components/TopButton";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <Testimonials />
         <ContactForm />
         <TopButton />
+        <WhatsAppButton position='bottom-left'/>
       </main>
     </>
   );
