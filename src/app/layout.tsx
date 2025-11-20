@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${nunito.className} ${inter.className} scroll-smooth`}>
+    <html lang="pt-BR" className=" scroll-smooth">
+      <body className={`${nunito.className} ${inter.className}`}>
         <Header />
         <main>{children}</main>
         <Footer />
@@ -34,4 +34,3 @@ export default function RootLayout({
     </html>
   );
 }
-

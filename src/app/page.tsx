@@ -1,13 +1,13 @@
 // app/page.tsx (ou pages/index.tsx)
-import AboutUs from "@/components/AboutUs";
-import ContactForm from "@/components/ContactForm";
-import DeliveryInfo from "@/components/DeliveryInfo";
+import AboutUs from "@/components/layout/AboutUs";
+import ContactForm from "@/components/layout/ContactForm";
+import DeliveryInfo from "@/components/layout/DeliveryInfo";
 import HeroSection from "@/components/layout/HeroSection";
-import ServicesOverview from "@/components/ServicesOverview";
-import RepairCategories from "@/components/RepairCategories";
-import Testimonials from "@/components/Testimonials";
-import TopButton from "@/components/TopButton";
-import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import ServicesOverview from "@/components/layout/ServicesOverview";
+import RepairCategories from "@/components/layout/RepairCategories";
+import Testimonials from "@/components/layout/Testimonials";
+
+import BotoesInf from "@/components/ui/BotoesInf";
 
 export default function Home() {
   return (
@@ -20,8 +20,7 @@ export default function Home() {
         <AboutUs />
         <Testimonials />
         <ContactForm />
-        <TopButton />
-        <WhatsAppButton position='bottom-left'/>
+        <BotoesInf/>
       </main>
     </>
   );

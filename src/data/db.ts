@@ -12,13 +12,16 @@ interface MeusDados {
   latitude: string;
   longitude: string;
   endereço: string;
+  horario: string;
 }
+
 
 export const meusDados: MeusDados = {
   nome: "João Gustavo",
   phoneNumber: "+55 85 9754-1169",
   latitude: "35116.9S",
   longitude: "383054.9W",
+  horario: 'Seg a Sex: 08:00 às 18:00',
   endereço: "R. F, 6262 jangurussu",
   email: "",
   whatsappUrl:

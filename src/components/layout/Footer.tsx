@@ -1,26 +1,25 @@
 // components/Footer.tsx
-import { meusDados } from '@/data/db';
-import Link from 'next/link';
-import { 
-  FaWhatsapp, 
-  FaInstagram, 
-  FaFacebook, 
-  FaMapMarkerAlt, 
-  FaPhone, 
+import { meusDados } from "@/data/db";
+import Link from "next/link";
+import {
+  FaWhatsapp,
+  FaInstagram,
+  FaFacebook,
+  FaMapMarkerAlt,
+  FaPhone,
   FaEnvelope,
   FaTools,
   FaClock,
-  FaArrowRight
-} from 'react-icons/fa';
+  FaArrowRight,
+} from "react-icons/fa";
 
-export default function Footer(){
+export default function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className="bg-linear-to-br from-gray-900 to-gray-800 text-gray-300 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          
           {/* Coluna 1: Logo e Sobre */}
           <div className="lg:col-span-1 space-y-6">
             <Link href="/" className="inline-block">
@@ -29,37 +28,42 @@ export default function Footer(){
                   <FaTools className="text-white text-xl" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">GugaTech Fortaleza</h3>
-                  <p className="text-sm text-gray-400 -mt-1">Tecnologia & Soluções</p>
+                  <h3 className="text-2xl font-bold text-white">
+                    GugaTech Fortaleza
+                  </h3>
+                  <p className="text-sm text-gray-400 -mt-1">
+                    Tecnologia & Soluções
+                  </p>
                 </div>
               </div>
             </Link>
-            
+
             <p className="text-gray-400 leading-relaxed">
-              Especialistas em soluções de TI há mais de 10 anos. Oferecemos serviços 
-              de qualidade com garantia e suporte técnico especializado.
+              Especialistas em soluções de TI há mais de 10 anos. Oferecemos
+              serviços de qualidade com garantia e suporte técnico
+              especializado.
             </p>
-            
+
             <div className="flex items-center gap-4">
-              <Link 
+              <Link
                 href={meusDados.whatsappUrl}
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-all duration-300 hover:scale-110"
               >
                 <FaWhatsapp className="text-white text-xl" />
               </Link>
-              <Link 
-                href="https://instagram.com" 
-                target="_blank" 
+              <Link
+                href="https://instagram.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-pink-600 hover:bg-pink-700 p-3 rounded-lg transition-all duration-300 hover:scale-110"
               >
                 <FaInstagram className="text-white text-xl" />
               </Link>
-              <Link 
-                href="https://facebook.com" 
-                target="_blank" 
+              <Link
+                href="https://facebook.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-600 hover:bg-blue-700 p-3 rounded-lg transition-all duration-300 hover:scale-110"
               >
@@ -80,11 +84,11 @@ export default function Footer(){
                 { name: "Nossos Serviços", href: "#services" },
                 { name: "Depoimentos", href: "#testimonials" },
                 { name: "Contato", href: "#contact" },
-                { name: "Orçamento", href: "#budget" }
+                { name: "Orçamento", href: "#budget" },
               ].map((link) => (
                 <li key={link.name}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="flex items-center gap-2 text-gray-400 hover:text-orange-400 transition-all duration-200 group"
                   >
                     <div className="w-1.5 h-1.5 bg-orange-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
@@ -108,11 +112,11 @@ export default function Footer(){
                 "Manutenção Hardware",
                 "Upgrade de PC",
                 "Montagem Gamer",
-                "Configuração de Rede"
+                "Configuração de Rede",
               ].map((service) => (
                 <li key={service}>
-                  <Link 
-                    href="#services" 
+                  <Link
+                    href="#services"
                     className="flex items-center gap-2 text-gray-400 hover:text-orange-400 transition-all duration-200 group"
                   >
                     <div className="w-1.5 h-1.5 bg-orange-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
@@ -132,17 +136,27 @@ export default function Footer(){
             <ul className="space-y-4">
               <li className="flex items-start gap-3 group hover:text-white transition-colors duration-200">
                 <FaMapMarkerAlt className="h-5 w-5 mt-1 text-orange-400 shrink-0" />
-                <span>Fortaleza, CE - Brasil<br />
-                <span className="text-sm text-gray-500">Atendemos toda região</span></span>
+                <span>
+                  {meusDados.localizacao}
+                  <br />
+                  <span className="text-sm text-gray-500">
+                    Atendemos toda região
+                  </span>
+                </span>
               </li>
               <li className="flex items-center gap-3 group hover:text-white transition-colors duration-200">
                 <FaPhone className="h-5 w-5 text-orange-400 shrink-0" />
-                <a href="tel:+558598228544" className="hover:text-orange-400">(85) 9822-8544</a>
+                <a href="tel:+558598228544" className="hover:text-orange-400">
+                  {meusDados.phoneNumber}
+                </a>
               </li>
               <li className="flex items-center gap-3 group hover:text-white transition-colors duration-200">
                 <FaEnvelope className="h-5 w-5 text-orange-400 shrink-0" />
-                <a href="mailto:contato@GugaTechfortaleza.com.br" className="hover:text-orange-400">
-                  contato@GugaTechfortaleza.com.br
+                <a
+                  href="mailto:contato@GugaTechfortaleza.com.br"
+                  className="hover:text-orange-400"
+                >
+                  {meusDados.email}
                 </a>
               </li>
             </ul>
@@ -155,12 +169,7 @@ export default function Footer(){
               </h6>
               <div className="text-sm space-y-1">
                 <div className="flex justify-between">
-                  <span>Seg - Sex:</span>
-                  <span className="text-orange-400">8h - 18h</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sábado:</span>
-                  <span className="text-orange-400">8h - 12h</span>
+                  <span className="text-orange-400">{meusDados.horario}</span>
                 </div>
               </div>
             </div>
@@ -169,27 +178,27 @@ export default function Footer(){
 
         {/* Linha de Copyright */}
         <div className="mt-16 pt-8 border-t border-gray-700">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-center md:text-left">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 ">
+            <div className="text-center">
               <p className="text-sm text-gray-400">
-                © {currentYear} GugaTech Fortaleza. Todos os direitos reservados.
+                © {currentYear} GugaTech Fortaleza. Todos os direitos
+                reservados.
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Desenvolvido com carinho para oferecer o melhor em tecnologia
+                Desenvolvido com carinho para oferecer o melhor em tecnologia -{" "}
+                <Link
+                  href="https://willian-gomes-949.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-orange-400"
+                >
+                  WillianGomes.
+                </Link>
               </p>
             </div>
-            
-            {/* <div className="flex items-center gap-6 text-sm text-gray-400">
-              <Link href="/politica-privacidade" className="hover:text-orange-400 transition-colors">
-                Política de Privacidade
-              </Link>
-              <Link href="/termos-uso" className="hover:text-orange-400 transition-colors">
-                Termos de Uso
-              </Link>
-            </div> */}
           </div>
         </div>
       </div>
     </footer>
   );
-};
+}
