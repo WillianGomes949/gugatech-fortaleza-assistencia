@@ -65,7 +65,7 @@ export default function BotoesInf() {
         <div className="fixed bottom-23 right-6 z-50 group transition-all duration-300 ease-initial ">
           <button
             type="button"
-            className=" flex justify-center items-center w-12 h-12 hover:scale-110 active:scale-95 z-50 animate-fade-in bg-orange-500 hover:bg-orange-600 p-3 rounded-2xl shadow-lg text-white"
+            className=" flex justify-center items-center w-12 h-12 hover:scale-110 active:scale-95 z-50 animate-fade-in bg-gray-500/50 hover:bg-orange-600 p-3 rounded-2xl shadow-lg text-white backdrop-blur-sm"
             onClick={scrollToTop}
             aria-label="Voltar ao topo"
           >
