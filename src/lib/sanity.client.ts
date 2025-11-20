@@ -20,7 +20,7 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // `true` é bom para performance de leitura
+  useCdn: false, // `true` é bom para performance de leitura
 });
 
 /**
