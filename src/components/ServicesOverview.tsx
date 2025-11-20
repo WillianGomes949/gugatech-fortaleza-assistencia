@@ -27,7 +27,7 @@ interface ServiceSanity {
   description: string
   image: SanityImage // Tipo de imagem do Sanity
   duration: string
-  icon: string // Ex: "HiShieldCheck" (vem como texto)
+  icon: string// Ex: "HiShieldCheck" (vem como texto)
   features: string[]
   price: string
 }
@@ -41,6 +41,7 @@ const iconMap: Record<string, IconType> = {
   HiChip: HiChip,
   HiCube: HiCube,
   HiWifi: HiWifi,
+
   // Adicione outros ícones que você cadastrar no Sanity aqui
 }
 
