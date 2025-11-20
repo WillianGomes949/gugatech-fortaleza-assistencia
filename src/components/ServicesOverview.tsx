@@ -129,14 +129,6 @@ export default async function ServicesOverview() {
                         <span>Garantia</span>
                       </div>
                     </div>
-                    {/* Link (Pode reativar se quiser) */}
-                    {/* <Link
-                      href={`/servicos/${service.slug.current}`} // Link dinâmico
-                      className="group flex ..."
-                    >
-                      Saiba mais
-                    </Link> 
-                    */}
                   </div>
                 </div>
               </div>
