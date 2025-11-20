@@ -38,7 +38,7 @@ export default function BotoesInf() {
         href={meusDados.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className={`fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-3 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 group`}
+        className={`fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-3 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 animate-fade-in group`}
         aria-label="Conversar no WhatsApp"
       >
         <FaWhatsapp className="h-6 w-6" />
