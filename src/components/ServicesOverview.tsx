@@ -1,14 +1,6 @@
 // components/ServicesOverview.tsx
 import Image from 'next/image'
 import Link from 'next/link'
-import { IconType } from 'react-icons'
-import {
-  HiShieldCheck,
-  HiDesktopComputer,
-  HiChip,
-  HiCube,
-  HiWifi,
-} from 'react-icons/hi'
 import { FaArrowRight, FaClock, FaShieldAlt } from 'react-icons/fa'
 
 // 1. IMPORTAÇÕES DO SANITY
@@ -16,7 +8,6 @@ import { sanityClient } from '@/lib/sanity.client'
 import { urlFor } from '@/lib/sanity.image' // Nosso helper de imagem
 import { groq } from 'next-sanity'
 import { Image as SanityImage } from 'sanity' // Renomeia o tipo para evitar conflito
-import { HiWrenchScrewdriver } from 'react-icons/hi2'
 
 // 2. INTERFACE DOS DADOS VINDOS DO SANITY
 // Corresponde ao nosso schema 'service'
@@ -27,23 +18,10 @@ interface ServiceSanity {
   description: string
   image: SanityImage // Tipo de imagem do Sanity
   duration: string
-  icon: string// Ex: "HiShieldCheck" (vem como texto)
   features: string[]
   price: string
 }
 
-// 3. MAPEADOR DE ÍCONES
-// Converte o texto do Sanity (Ex: "HiShieldCheck") no componente React
-const iconMap: Record<string, IconType> = {
-  HiShieldCheck: HiShieldCheck,
-  HiDesktopComputer: HiDesktopComputer,
-  HiWrenchScrewdriver: HiWrenchScrewdriver,
-  HiChip: HiChip,
-  HiCube: HiCube,
-  HiWifi: HiWifi,
-
-  // Adicione outros ícones que você cadastrar no Sanity aqui
-}
 
 // 4. A CONSULTA GROQ
 // Busca todos os documentos do tipo 'service'
@@ -54,7 +32,6 @@ const servicesQuery = groq`*[_type == "service"] | order(title asc) {
   description,
   image,
   duration,
-  icon,
   features,
   price
 }`
@@ -80,17 +57,15 @@ export default async function ServicesOverview() {
             Assistência Técnica{" "}
             <span className="text-orange-600">Completa</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <span className="text-xl text-gray-600 max-w-2xl mx-auto">
             Serviços especializados com retirada e entrega grátis no local
-          </p>
+          </span>
         </div>
 
         {/* 7. GRID DE SERVIÇOS DINÂMICO */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => {
-            // Encontra o componente de ícone correto, ou usa um padrão
-            const IconComponent = iconMap[service.icon] || HiWrenchScrewdriver
-            
+          
             // Gera a URL da imagem
             const imageUrl = urlFor(service.image)
               .width(400)
@@ -115,9 +90,6 @@ export default async function ServicesOverview() {
                     <FaClock className="text-xs" />
                     {service.duration}
                   </div>
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-lg">
-                    <IconComponent className="text-orange-500 text-2xl" />
-                  </div>
                 </div>
 
                 {/* Conteúdo do Serviço */}
@@ -125,9 +97,9 @@ export default async function ServicesOverview() {
                   <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                  <span className="text-gray-600 text-sm mb-4 leading-relaxed">
                     {service.description}
-                  </p>
+                  </span>
 
                   {/* Lista de Features */}
                   <div className="mb-4">
