@@ -28,7 +28,7 @@ interface BasePayload {
   phone: string;
   email: string;
   message?: string;
-  status: "pending" | "read" | "answered" | "completed";
+  status: "pendente" | "lido" | "respondido" | "concluído";
   _createdAt?: string;
 }
 
@@ -46,6 +46,9 @@ export interface ContactMessagePayload extends BasePayload {
   message: string;
   serviceType: string;
 }
+
+// Tipo unificado para uso no Modal
+type ModalData = BudgetRequestPayload | ContactMessagePayload;
 
 interface AdminDataItem {
   id: string;
@@ -183,7 +186,7 @@ function AdminTable({
               >
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-linear-to-r from-orange-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {item.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -215,13 +218,13 @@ function AdminTable({
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize
                     ${
-                      item.status === "pending"
+                      item.status === "pendente"
                         ? "bg-yellow-100 text-yellow-800"
-                        : item.status === "read"
+                        : item.status === "lido"
                         ? "bg-gray-100 text-gray-800"
-                        : item.status === "answered"
+                        : item.status === "respondido"
                         ? "bg-orange-100 text-orange-800"
-                        : item.status === "completed"
+                        : item.status === "concluído"
                         ? "bg-green-100 text-green-800"
                         : "bg-gray-100 text-gray-800"
                     }`}
@@ -229,13 +232,13 @@ function AdminTable({
                     <div
                       className={`w-2 h-2 rounded-full mr-2
                       ${
-                        item.status === "pending"
+                        item.status === "pendente"
                           ? "bg-yellow-500"
-                          : item.status === "read"
+                          : item.status === "lido"
                           ? "bg-gray-500"
-                          : item.status === "answered"
+                          : item.status === "respondido"
                           ? "bg-orange-500"
-                          : item.status === "completed"
+                          : item.status === "concluído"
                           ? "bg-green-500"
                           : "bg-gray-500"
                       }`}
@@ -433,17 +436,17 @@ export default function AdminPage() {
     setSelectedItem(item);
     setIsModalOpen(true);
 
-    if (item.status === "pending") {
+    if (item.status === "pendente") {
       try {
         await fetch("/api/admin/update-status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: item.id, status: "read" }),
+          body: JSON.stringify({ id: item.id, status: "lido" }),
         });
         
         const updateData = (prevData: AdminDataItem[]) =>
           prevData.map((d) =>
-            d.id === item.id ? { ...d, status: "read" } : d
+            d.id === item.id ? { ...d, status: "lido" } : d
           );
 
         if (item.type === "budget") {
@@ -493,6 +496,60 @@ export default function AdminPage() {
     } finally {
       setSelectedItem(null);
     }
+  };
+
+  // --- NOVA FUNÇÃO: Salvar Dados Editados ---
+  const handleUpdateData = async (updatedData: ModalData) => {
+    // 1. Chama API para salvar no Sanity
+    // (Você precisará criar o endpoint /api/admin/update se ele não existir)
+    const response = await fetch("/api/admin/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Erro ao atualizar");
+
+    // 2. Atualiza a UI Localmente (Optimistic Update)
+    const updateLocalList = (list: AdminDataItem[]) => 
+      list.map((item) => {
+        if (item.id === updatedData._id) {
+          // Mapeia os campos novos de volta para o formato da tabela
+          const isBudget = updatedData._type === 'budgetRequest';
+          return {
+            ...item,
+            name: isBudget ? (updatedData as BudgetRequestPayload).customerName : (updatedData as ContactMessagePayload).name,
+            phone: isBudget ? (updatedData as BudgetRequestPayload).customerPhone : (updatedData as ContactMessagePayload).phone,
+            email: isBudget ? 'N/A' : (updatedData as ContactMessagePayload).email,
+            rawData: updatedData // Atualiza os dados brutos para reabrir o modal corretamente
+          };
+        }
+        return item;
+      });
+
+    setData(prev => ({
+      budgets: updateLocalList(prev.budgets),
+      submissions: updateLocalList(prev.submissions)
+    }));
+
+    // Se o item selecionado for o mesmo que está sendo editado, atualiza ele também
+    if (selectedItem && selectedItem.id === updatedData._id) {
+       setSelectedItem(prev => {
+          if (!prev) return null;
+          const isBudget = updatedData._type === 'budgetRequest';
+          return {
+             ...prev,
+             name: isBudget ? (updatedData as BudgetRequestPayload).customerName : (updatedData as ContactMessagePayload).name,
+             rawData: updatedData
+          }
+       })
+    }
+
+    setActionMessage({
+      type: "success",
+      text: "Informações atualizadas com sucesso!",
+    });
   };
 
   const handleDelete = async (item: AdminDataItem) => {
@@ -546,7 +603,7 @@ export default function AdminPage() {
   const currentData = activeTab === "budgets" ? data.budgets : data.submissions;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-orange-50 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50 pt-20">
       <div className="container mx-auto px-4 md:px-6 py-8">
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">
           Gerenciamento de Solicitações
@@ -559,19 +616,19 @@ export default function AdminPage() {
             title="Total de Orçamentos"
             value={data.budgets.length}
             icon={<FaListAlt className="text-white text-xl" />}
-            color="bg-linear-to-r from-orange-500 to-orange-600"
+            color="bg-gradient-to-r from-orange-500 to-orange-600"
           />
           <StatCard
             title="Mensagens de Contato"
             value={data.submissions.length}
             icon={<FaEnvelope className="text-white text-xl" />}
-            color="bg-linear-to-r from-orange-500 to-orange-600"
+            color="bg-gradient-to-r from-orange-500 to-orange-600"
           />
           <StatCard
             title="Total de Solicitações"
             value={data.budgets.length + data.submissions.length}
             icon={<FaChartBar className="text-white text-xl" />}
-            color="bg-linear-to-r from-violet-500 to-violet-600"
+            color="bg-gradient-to-r from-violet-500 to-violet-600"
           />
         </div>
 
@@ -582,7 +639,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("budgets")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "budgets"
-                  ? "bg-linear-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -592,7 +649,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("submissions")}
               className={`px-8 py-3 rounded-xl font-medium transition-all ${
                 activeTab === "submissions"
-                  ? "bg-linear-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
+                  ? "bg-gradient-to-r from-orange-500 to-orange-500 text-white shadow-lg shadow-orange-500/25"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -635,9 +692,12 @@ export default function AdminPage() {
         <DetailModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
+          key={selectedItem?.id}
           data={selectedItem.rawData}
           type={selectedItem.type === "budget" ? "budgetRequest" : "contactMessage"}
           onSaveSuccess={handleSaveSuccess}
+          // NOVA PROP ADICIONADA
+          onUpdateData={handleUpdateData} 
         />
       )}
     </div>
