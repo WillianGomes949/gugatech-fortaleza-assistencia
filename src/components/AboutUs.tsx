@@ -70,7 +70,7 @@ export default function AboutUs() {
                   </div>
 
                   {/* Botão CTA */}
-                  <Link href="/" className="group mt-6 px-8 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center w-full transform hover:scale-105">
+                  <Link href="/budget" className="group mt-6 px-8 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center w-full transform hover:scale-105">
                     <span className="text-lg">Quero Aproveitar!</span>
                     <FaArrowRight className="ml-3 transition-transform duration-300 group-hover:translate-x-2" />
                   </Link>

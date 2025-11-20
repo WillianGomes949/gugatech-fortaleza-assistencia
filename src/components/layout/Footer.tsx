@@ -1,4 +1,5 @@
 // components/Footer.tsx
+import { meusDados } from '@/data/db';
 import Link from 'next/link';
 import { 
   FaWhatsapp, 
@@ -41,7 +42,7 @@ export default function Footer(){
             
             <div className="flex items-center gap-4">
               <Link 
-                href="https://wa.me/558598228544" 
+                href={meusDados.whatsappUrl}
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-all duration-300 hover:scale-110"

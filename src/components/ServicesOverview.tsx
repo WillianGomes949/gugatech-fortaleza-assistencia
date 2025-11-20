@@ -1,27 +1,27 @@
 // components/ServicesOverview.tsx
-import Image from 'next/image'
-import Link from 'next/link'
-import { FaArrowRight, FaClock, FaShieldAlt } from 'react-icons/fa'
+import Image from "next/image";
+import Link from "next/link";
+import { FaArrowRight, FaClock, FaShieldAlt } from "react-icons/fa";
 
 // 1. IMPORTAÇÕES DO SANITY
-import { sanityClient } from '@/lib/sanity.client'
-import { urlFor } from '@/lib/sanity.image' // Nosso helper de imagem
-import { groq } from 'next-sanity'
-import { Image as SanityImage } from 'sanity' // Renomeia o tipo para evitar conflito
+import { sanityClient } from "@/lib/sanity.client";
+import { urlFor } from "@/lib/sanity.image"; // Nosso helper de imagem
+import { groq } from "next-sanity";
+import { Image as SanityImage } from "sanity"; // Renomeia o tipo para evitar conflito
+import { meusDados } from "@/data/db";
 
 // 2. INTERFACE DOS DADOS VINDOS DO SANITY
 // Corresponde ao nosso schema 'service'
 interface ServiceSanity {
-  _id: string
-  title: string
-  slug: { current: string }
-  description: string
-  image: SanityImage // Tipo de imagem do Sanity
-  duration: string
-  features: string[]
-  price: string
+  _id: string;
+  title: string;
+  slug: { current: string };
+  description: string;
+  image: SanityImage; // Tipo de imagem do Sanity
+  duration: string;
+  features: string[];
+  price: string;
 }
-
 
 // 4. A CONSULTA GROQ
 // Busca todos os documentos do tipo 'service'
@@ -34,13 +34,12 @@ const servicesQuery = groq`*[_type == "service"] | order(title asc) {
   duration,
   features,
   price
-}`
+}`;
 
 // 5. TRANSFORMA O COMPONENTE EM ASSÍNCRONO
 export default async function ServicesOverview() {
-  
   // 6. BUSCA OS DADOS NO SERVIDOR
-  const services = await sanityClient.fetch<ServiceSanity[]>(servicesQuery)
+  const services = await sanityClient.fetch<ServiceSanity[]>(servicesQuery);
 
   return (
     <section
@@ -65,12 +64,8 @@ export default async function ServicesOverview() {
         {/* 7. GRID DE SERVIÇOS DINÂMICO */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => {
-          
             // Gera a URL da imagem
-            const imageUrl = urlFor(service.image)
-              .width(400)
-              .height(250)
-              .url()
+            const imageUrl = urlFor(service.image).width(400).height(250).url();
 
             return (
               <div
@@ -110,7 +105,9 @@ export default async function ServicesOverview() {
                           className="flex items-center gap-2"
                         >
                           <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                          <span className="text-xs text-gray-600">{feature}</span>
+                          <span className="text-xs text-gray-600">
+                            {feature}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -143,7 +140,7 @@ export default async function ServicesOverview() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -158,7 +155,7 @@ export default async function ServicesOverview() {
               específica
             </p>
             <Link
-              href="https://wa.me/558598228544"
+              href={meusDados.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl"

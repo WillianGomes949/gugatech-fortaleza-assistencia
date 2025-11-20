@@ -1,4 +1,5 @@
 // components/HeroSection.tsx
+import { meusDados } from "@/data/db";
 import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp, FaTools, FaShieldAlt, FaClock, FaStar } from "react-icons/fa";
@@ -55,7 +56,7 @@ export default function HeroSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 items-center lg:items-start">
               <Link
-                href="https://wa.me/558598228544"
+                href={meusDados.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 hover:scale-105 w-full sm:w-auto"

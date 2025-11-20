@@ -1,6 +1,8 @@
 // components/DeliveryInfo.tsx
 
+import { meusDados } from "@/data/db";
 import Image from "next/image";
+import Link from "next/link";
 import {
   FaTruck,
   FaHome,
@@ -22,8 +24,7 @@ export default function DeliveryInfo() {
             Comodidade Total
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Serviço de <span className="text-orange-600">Busca e Entrega</span>{" "}
-            Grátis
+            Serviço de <span className="text-orange-600">Busca e Entrega.</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Pensamos na sua praticidade do início ao fim do serviço
@@ -40,8 +41,7 @@ export default function DeliveryInfo() {
 
               <p className="text-lg text-gray-700 leading-relaxed mb-8">
                 Oferecemos um serviço completo de retirada e entrega do seu
-                equipamento diretamente na sua residência ou empresa, sem custos
-                adicionais. Trabalhamos para tornar sua experiência a mais
+                equipamento diretamente na sua residência ou empresa. Trabalhamos para tornar sua experiência a mais
                 conveniente possível.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -123,10 +123,15 @@ export default function DeliveryInfo() {
               </div>
 
               {/* CTA */}
-              <button className="w-full mt-6 px-8 py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+              <Link
+                href={meusDados.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full mt-6 px-8 py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 group">
+
                 <span>AGENDAR RETIRADA</span>
-                <FaTruck className="transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
+                <FaTruck className="transition-transform duration-300 group-hover:translate-x-3" />
+              </Link>
             </div>
           </div>
           {/* Coluna da Imagem */}
@@ -152,10 +157,6 @@ export default function DeliveryInfo() {
                 </div>
               </div>
             </div>
-
-            {/* Elementos Decorativos */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-orange-500/10 rounded-full"></div>
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-orange-500/5 rounded-full"></div>
           </div>
         </div>
       </div>

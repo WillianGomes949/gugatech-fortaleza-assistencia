@@ -8,6 +8,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { FaHouse } from "react-icons/fa6";
 import Image from "next/image";
 import { RiAdminFill } from "react-icons/ri";
+import { meusDados } from "@/data/db";
 
 const navLinks = [
   { name: "Início", href: "/", icon: FaHouse },
@@ -168,7 +169,7 @@ export default function Header() {
             <div className="px-4 py-4 bg-gray-50 border-t border-gray-100">
               <div className="flex justify-center gap-4">
                 <a
-                  href="https://wa.me/558598228544"
+                  href={meusDados.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-green-600 font-semibold text-sm"

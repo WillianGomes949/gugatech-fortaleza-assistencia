@@ -145,11 +145,8 @@ export default function Testimonials(){
               Junte-se aos centenas de clientes satisfeitos e tenha a melhor experiência em assistência técnica
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/" className="px-8 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
+              <Link href="/budget" className="px-8 py-4 bg-white text-orange-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
                 SOLICITAR ORÇAMENTO
-              </Link>
-              <Link href="/" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-xl hover:bg-white/10 transition-all duration-300">
-                VER MAIS DEPOIMENTOS
               </Link>
             </div>
           </div>
