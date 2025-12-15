@@ -12,7 +12,7 @@
     "@next/env": "^16.0.3",
     "@sanity/client": "^7.12.1",
     "http-proxy-middleware": "^3.0.5",
-    "next": "16.0.7",
+    "next": "16.0.10",
     "next-sanity": "^11.6.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
